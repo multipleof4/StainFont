@@ -37,22 +37,19 @@ export const glyphd = (opentype, adv) =>
     "d",
     "d".codePointAt(0),
     (p) => {
-      p.moveTo(310, -10);
-      p.curveTo(250, -10, 200, 10, 160, 40);
-      p.lineTo(160, 0);
-      p.lineTo(100, 0);
-      p.lineTo(100, 720);
-      p.lineTo(160, 720);
-      p.lineTo(160, 440);
-      p.curveTo(200, 470, 250, 490, 310, 490);
-      p.curveTo(430, 490, 520, 400, 520, 240);
-      p.curveTo(520, 80, 430, -10, 310, -10);
+      p.moveTo(500, 0);
+      p.lineTo(500, 720);
+      p.lineTo(440, 720);
+      p.lineTo(440, 480);
+      p.lineTo(290, 480);
+      p.curveTo(150, 480, 80, 380, 80, 240);
+      p.curveTo(80, 100, 150, 0, 290, 0);
       p.close();
-      p.moveTo(310, 50);
-      p.curveTo(400, 50, 460, 110, 460, 240);
-      p.curveTo(460, 370, 400, 430, 310, 430);
-      p.curveTo(220, 430, 160, 370, 160, 240);
-      p.curveTo(160, 110, 220, 50, 310, 50);
+      p.moveTo(290, 60);
+      p.curveTo(180, 60, 140, 130, 140, 240);
+      p.curveTo(140, 350, 180, 420, 290, 420);
+      p.lineTo(440, 420);
+      p.lineTo(440, 60);
       p.close();
       return p;
     },
