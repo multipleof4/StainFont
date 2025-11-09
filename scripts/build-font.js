@@ -51,15 +51,19 @@ const mkGlyph=(name,unicode,adv,pathFn)=>
   });
 
 const glyphSpace=mkGlyph("space"," ".codePointAt(0),260,p=>p);
-const glyphPeriod=mkGlyph("period","."
-  .codePointAt(0),260,p=>{
-  p.moveTo(80,0);
-  p.lineTo(80,120);
-  p.lineTo(180,120);
-  p.lineTo(180,0);
-  p.close();
-  return p;
-});
+const glyphPeriod=mkGlyph(
+  "period",
+  ".".codePointAt(0),
+  260,
+  p=>{
+    p.moveTo(80,0);
+    p.lineTo(80,120);
+    p.lineTo(180,120);
+    p.lineTo(180,0);
+    p.close();
+    return p;
+  }
+);
 
 const glyphList=[
   glyphSpace,
@@ -125,7 +129,7 @@ const font=new opentype.Font({
   ascender,
   descender,
   glyphs:glyphList,
-  copyright:"Author: Anon"
+  copyright:"Author: Anon. License: CC0 1.0 Universal."
 });
 
 const buf=Buffer.from(font.toArrayBuffer());
