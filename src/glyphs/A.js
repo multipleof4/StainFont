@@ -32,26 +32,26 @@ export const glypha=(opentype,adv)=>
     "a",
     "a".codePointAt(0),
     p=>{
-      const x=300,yBase=-10;
-      const bowlTop=460,asc=480;
-      const rOuter=210,rInner=145;
-      p.moveTo(x+rOuter,yBase+80);
-      p.curveTo(x+rOuter,yBase+10,x+80,yBase-40,x,yBase-40);
-      p.curveTo(x-120,yBase-40,x-210,yBase+50,x-210,yBase+210);
-      p.curveTo(x-210,yBase+370,x-120,bowlTop,x,bowlTop);
-      p.curveTo(x+85,bowlTop,x+155,bowlTop-45,x+190,bowlTop-110);
-      p.lineTo(x+190,asc-30);
-      p.lineTo(x+250,asc-30);
-      p.lineTo(x+250,0);
-      p.lineTo(x+190,0);
-      p.lineTo(x+190,60);
-      p.curveTo(x+150,yBase+10,x+85,yBase-10,x,yBase-10);
+      const cx=310,cy=245;
+      const rO=175,rI=115;
+      const stemX=cx+150;
+      const asc=480;
+      p.moveTo(cx+rO,cy);
+      p.curveTo(cx+rO,cy+96,cx+96,cy+rO,cx,cy+rO);
+      p.curveTo(cx-96,cy+rO,cx-rO,cy+96,cx-rO,cy);
+      p.curveTo(cx-rO,cy-96,cx-96,cy-rO,cx,cy-rO);
+      p.curveTo(cx+96,cy-rO,cx+rO,cy-96,cx+rO,cy);
       p.close();
-      p.moveTo(x,yBase+40);
-      p.curveTo(x+95,yBase+40,x+150,yBase+115,x+150,yBase+210);
-      p.curveTo(x+150,yBase+305,x+95,bowlTop-40,x,bowlTop-40);
-      p.curveTo(x-95,bowlTop-40,x-150,yBase+305,x-150,yBase+210);
-      p.curveTo(x-150,yBase+115,x-95,yBase+40,x,yBase+40);
+      p.moveTo(cx+rI,cy);
+      p.curveTo(cx+rI,cy+64,cx+64,cy+rI,cx,cy+rI);
+      p.curveTo(cx-64,cy+rI,cx-rI,cy+64,cx-rI,cy);
+      p.curveTo(cx-rI,cy-64,cx-64,cy-rI,cx,cy-rI);
+      p.curveTo(cx+64,cy-rI,cx+rI,cy-64,cx+rI,cy);
+      p.close();
+      p.moveTo(stemX-40,-10);
+      p.lineTo(stemX+40,-10);
+      p.lineTo(stemX+40,asc);
+      p.lineTo(stemX-40,asc);
       p.close();
       return p;
     },
