@@ -137,20 +137,20 @@
 
   <div class="input-wrap">
     <span>Sample text:</span>
-    <input id="text" value="Stain: The quick brown fox jumps over the lazy dog ABC abc" />
+    <input id="text" value="Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. ABC abc" />
   </div>
 
   <div class="grid">
     <section class="panel">
       <div class="label">Stain</div>
       <div id="stainSample" class="sample stain">
-        Stain: The quick brown fox jumps over the lazy dog ABC abc
+        Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. ABC abc
       </div>
     </section>
     <section class="panel">
       <div class="label">System (Candara / fallback)</div>
       <div id="sysSample" class="sample sys">
-        Stain: The quick brown fox jumps over the lazy dog ABC abc
+        Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. ABC abc
       </div>
     </section>
   </div>
@@ -165,15 +165,15 @@
     const sysSample = document.getElementById("sysSample");
 
     const update = () => {
-      const content = text.value || "Stain: The quick brown fox jumps over the lazy dog ABC abc";
+      const content = text.value || "Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. ABC abc";
       const fs = size.valueAsNumber || 40;
       const ls = (track.valueAsNumber || 3) / 100;
-      sizeVal.textContent = fs + "px";
-      trackVal.textContent = ls.toFixed(2) + "em";
+      sizeVal.textContent = `${fs}px`;
+      trackVal.textContent = `${ls.toFixed(2)}em`;
       [stainSample, sysSample].forEach((el) => {
         el.textContent = content;
-        el.style.fontSize = fs + "px";
-        el.style.letterSpacing = ls + "em";
+        el.style.fontSize = `${fs}px`;
+        el.style.letterSpacing = `${ls}em`;
       });
     };
 
