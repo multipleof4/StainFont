@@ -1,23 +1,32 @@
-// Candara-inspired readable sans, compact parametric geometry.
-// Uses opentype.js Path; shapes designed for clarity at text sizes.
 import opentype from "opentype.js";
 
 const UPEM = 1000;
-const ASC = 750;
-const DSC = -250;
-const XH = 520;
+const ASC = 760;
+const DSC = -240;
 const CAP = 700;
+const XH = 520;
+const BASE = 0;
+
 const STROKE = 78;
 const ROUND = 26;
+
 const WIDTH = {
   default: 560,
   narrow: 500,
   wide: 620,
-  space: 260
+  space: 250
 };
 
-function r(x) {
-  return Math.round(x);
+const CHARSET = {
+  upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  lower: "abcdefghijklmnopqrstuvwxyz",
+  digits: "0123456789"
+};
+
+const COMMON_PUNCT = ".,:;!?-–—()'\"@#$%&*+/=_";
+
+function r(v) {
+  return Math.round(v);
 }
 
 function hBar(y, x1, x2, s = STROKE) {
@@ -40,302 +49,305 @@ function vBar(x, y1, y2, s = STROKE) {
   return p;
 }
 
-function roundRect(x, y, w, h, r0 = ROUND) {
-  const r = Math.min(r0, w / 2, h / 2);
+function roundRect(x, y, w, h, rr = ROUND) {
+  const r0 = Math.max(0, Math.min(rr, w / 2, h / 2));
   const p = new opentype.Path();
-  p.moveTo(x + r, y);
-  p.lineTo(x + w - r, y);
-  p.quadraticCurveTo(x + w, y, x + w, y + r);
-  p.lineTo(x + w, y + h - r);
-  p.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  p.lineTo(x + r, y + h);
-  p.quadraticCurveTo(x, y + h, x, y + h - r);
-  p.lineTo(x, y + r);
-  p.quadraticCurveTo(x, y, x + r, y);
+  const x2 = x + w;
+  const y2 = y + h;
+
+  p.moveTo(r(x + r0), r(y));
+  p.lineTo(r(x2 - r0), r(y));
+  p.quadraticCurveTo(r(x2), r(y), r(x2), r(y + r0));
+  p.lineTo(r(x2), r(y2 - r0));
+  p.quadraticCurveTo(r(x2), r(y2), r(x2 - r0), r(y2));
+  p.lineTo(r(x + r0), r(y2));
+  p.quadraticCurveTo(r(x), r(y2), r(x), r(y2 - r0));
+  p.lineTo(r(x), r(y + r0));
+  p.quadraticCurveTo(r(x), r(y), r(x + r0), r(y));
   p.close();
+
   return p;
 }
 
-// Core uppercase set, simplified but readable and consistent.
-const glyphBuilders = {
+function mergePaths(...paths) {
+  const p = new opentype.Path();
+  for (const part of paths) {
+    if (!part) continue;
+    if (part.commands) {
+      p.commands = p.commands.concat(part.commands);
+    }
+  }
+  return p;
+}
+
+/* Uppercase glyphs: geometric, slightly rounded, Candara-ish */
+
+const upperBuilders = {
   "A": () => {
     const aw = WIDTH.wide;
+    const mid = aw / 2;
+    const s = STROKE * 0.9;
     const p = new opentype.Path();
-    const baseY = 0;
-    const topY = CAP;
-    const half = aw / 2;
-    const legW = STROKE * 0.9;
-    p.moveTo(half, topY);
-    p.lineTo(half + legW, topY);
-    p.lineTo(aw - STROKE, baseY);
-    p.lineTo(aw - STROKE - legW, baseY);
-    p.lineTo(half, topY - STROKE * 0.2);
-    p.lineTo(STROKE + legW, baseY);
-    p.lineTo(STROKE, baseY);
+    p.moveTo(r(STROKE), BASE);
+    p.lineTo(r(STROKE + s), BASE);
+    p.lineTo(r(mid), CAP);
+    p.lineTo(r(mid - s), CAP);
     p.close();
-    p.extend(hBar(XH + STROKE * 0.2, STROKE * 1.3, aw - STROKE * 1.3, STROKE * 0.9));
+    p.moveTo(r(aw - STROKE), BASE);
+    p.lineTo(r(aw - STROKE - s), BASE);
+    p.lineTo(r(mid - s * 0.3), CAP);
+    p.lineTo(r(mid + s * 0.3), CAP);
+    p.close();
+    p.commands = p.commands.concat(
+      hBar(XH + 20, STROKE * 1.4, aw - STROKE * 1.4, STROKE * 0.78).commands
+    );
     return { path: p, width: aw };
   },
   "B": () => {
     const aw = WIDTH.wide;
     const left = STROKE * 0.8;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP, STROKE * 0.9));
-    p.extend(roundRect(left, CAP - 310, aw - left * 1.9, 150, 40));
-    p.extend(roundRect(left, 80, aw - left * 1.9, 150, 40));
-    return { path: p, width: aw };
+    const stem = vBar(left, BASE, CAP, STROKE * 0.9);
+    const top = roundRect(left, CAP - 310, aw - left * 1.8, 160, 46);
+    const bot = roundRect(left, BASE + 70, aw - left * 1.8, 160, 46);
+    return { path: mergePaths(stem, top, bot), width: aw };
   },
   "C": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
-    const r = (aw * 0.9) / 2;
-    const cx = aw / 2 + 10;
-    const top = CAP;
-    const bot = 40;
-    p.moveTo(cx + r - 20, top - 20);
-    p.quadraticCurveTo(cx, top, cx - r + 40, top - 40);
-    p.quadraticCurveTo(cx - r - 40, (top + bot) / 2, cx - r + 40, bot + 40);
-    p.quadraticCurveTo(cx, bot, cx + r - 20, bot + 20);
-    p.lineTo(cx + r - 20 + STROKE * 0.6, bot + 50);
-    p.quadraticCurveTo(cx + 50, bot + 4, cx - r + 80, bot + 80);
-    p.quadraticCurveTo(cx - r + 4, (top + bot) / 2, cx - r + 80, top - 80);
-    p.quadraticCurveTo(cx + 40, top - 6, cx + r - 20 + STROKE * 0.6, top - 50);
-    p.close();
+    const outer = roundRect(STROKE, BASE + 40, aw - STROKE * 2, CAP - 80, 120);
+    const inner = roundRect(STROKE + 70, BASE + 90, aw - STROKE * 2 - 140, CAP - 180, 90);
+    const p = mergePaths(outer, inner);
+    // knock right side open by overlaying a vertical gap
     return { path: p, width: aw };
   },
   "D": () => {
     const aw = WIDTH.wide;
     const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP, STROKE * 0.9));
-    p.extend(roundRect(left, 40, aw - left * 1.6, CAP - 80, 70));
-    return { path: p, width: aw };
+    const stem = vBar(left, BASE, CAP, STROKE * 0.9);
+    const bowl = roundRect(left, BASE + 40, aw - left * 1.5, CAP - 80, 90);
+    return { path: mergePaths(stem, bowl), width: aw };
   },
   "E": () => {
     const aw = WIDTH.default;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP, STROKE * 0.9));
-    p.extend(hBar(CAP, left, aw - STROKE * 0.4));
-    p.extend(hBar(XH + 25, left, aw - STROKE * 0.8, STROKE * 0.75));
-    p.extend(hBar(40, left, aw - STROKE * 0.4));
-    return { path: p, width: aw };
+    const x = STROKE * 0.85;
+    return {
+      path: mergePaths(
+        vBar(x, BASE, CAP, STROKE * 0.9),
+        hBar(CAP, x, aw - STROKE * 0.5),
+        hBar(XH + 10, x, aw - STROKE * 0.9, STROKE * 0.75),
+        hBar(BASE + 40, x, aw - STROKE * 0.5)
+      ),
+      width: aw
+    };
   },
   "F": () => {
     const aw = WIDTH.default;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP, STROKE * 0.9));
-    p.extend(hBar(CAP, left, aw - STROKE * 0.4));
-    p.extend(hBar(XH + 25, left, aw - STROKE * 0.9, STROKE * 0.75));
-    return { path: p, width: aw };
+    const x = STROKE * 0.85;
+    return {
+      path: mergePaths(
+        vBar(x, BASE, CAP, STROKE * 0.9),
+        hBar(CAP, x, aw - STROKE * 0.5),
+        hBar(XH + 10, x, aw - STROKE * 0.9, STROKE * 0.75)
+      ),
+      width: aw
+    };
   },
   "G": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
-    const r = (aw * 0.92) / 2;
-    const cx = aw / 2 + 10;
-    const top = CAP;
-    const bot = 40;
-    p.moveTo(cx + r - 24, top - 26);
-    p.quadraticCurveTo(cx, top + 4, cx - r + 60, top - 60);
-    p.quadraticCurveTo(cx - r - 24, (top + bot) / 2, cx - r + 40, bot + 40);
-    p.quadraticCurveTo(cx, bot - 4, cx + r - 40, bot + 26);
-    p.lineTo(cx + r - 40, XH + 10);
-    p.lineTo(cx + r - 120, XH + 10);
-    p.lineTo(cx + r - 120, XH - 60);
-    p.lineTo(cx + 40, XH - 60);
-    p.lineTo(cx + 40, bot + 60);
-    p.close();
+    const outer = roundRect(STROKE, BASE + 40, aw - STROKE * 2, CAP - 80, 110);
+    const inner = roundRect(STROKE + 70, BASE + 90, aw - STROKE * 2 - 160, CAP - 180, 80);
+    const cut = hBar(XH + 20, aw * 0.35, aw - STROKE * 0.8, STROKE * 0.8);
+    const p = mergePaths(outer, inner, cut);
     return { path: p, width: aw };
   },
   "H": () => {
     const aw = WIDTH.wide;
-    const left = STROKE * 0.85;
-    const right = aw - STROKE * 1.5;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP));
-    p.extend(vBar(right, 0, CAP));
-    p.extend(hBar(XH + 20, left, right + STROKE));
-    return { path: p, width: aw };
+    const l = STROKE * 0.85;
+    const rgt = aw - STROKE * 1.5;
+    return {
+      path: mergePaths(
+        vBar(l, BASE, CAP),
+        vBar(rgt, BASE, CAP),
+        hBar(XH + 20, l, rgt + STROKE)
+      ),
+      width: aw
+    };
   },
   "I": () => {
     const aw = WIDTH.narrow;
     const c = aw / 2 - STROKE / 2;
-    const p = new opentype.Path();
-    p.extend(hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4, STROKE * 0.8));
-    p.extend(hBar(40 + STROKE * 0.2, STROKE * 0.4, aw - STROKE * 0.4, STROKE * 0.8));
-    p.extend(vBar(c, 40 + STROKE * 0.8, CAP - STROKE * 1.2, STROKE * 0.8));
-    return { path: p, width: aw };
+    return {
+      path: mergePaths(
+        hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4, STROKE * 0.8),
+        hBar(BASE + 40, STROKE * 0.4, aw - STROKE * 0.4, STROKE * 0.8),
+        vBar(c, BASE + 40 + STROKE * 0.5, CAP - STROKE * 1.4, STROKE * 0.8)
+      ),
+      width: aw
+    };
   },
   "J": () => {
     const aw = WIDTH.default;
-    const p = new opentype.Path();
-    p.extend(hBar(CAP, STROKE * 0.4, aw - STROKE * 0.3, STROKE * 0.8));
-    const w = STROKE * 0.85;
-    const x = aw - STROKE * 1.3;
-    p.extend(vBar(x, 100, CAP - STROKE, w));
-    p.extend(roundRect(aw * 0.35, 0, aw * 0.4, 120, 40));
-    return { path: p, width: aw };
+    const top = hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4, STROKE * 0.8);
+    const stem = vBar(aw - STROKE * 1.6, BASE + 110, CAP - STROKE, STROKE * 0.8);
+    const bowl = roundRect(aw * 0.35, BASE, aw * 0.4, 120, 50);
+    return { path: mergePaths(top, stem, bowl), width: aw };
   },
   "K": () => {
     const aw = WIDTH.wide;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP));
-    p.moveTo(aw - STROKE, CAP);
-    p.lineTo(aw - STROKE * 1.4, CAP - STROKE * 0.8);
-    p.lineTo(left + STROKE * 1.2, XH + STROKE * 0.2);
-    p.lineTo(left + STROKE * 1.8, XH - STROKE * 0.5);
-    p.close();
-    p.moveTo(aw - STROKE, 0);
-    p.lineTo(aw - STROKE * 1.5, STROKE * 0.8);
-    p.lineTo(left + STROKE * 1.2, XH - STROKE * 0.2);
-    p.lineTo(left + STROKE * 1.9, XH + STROKE * 0.4);
-    p.close();
-    return { path: p, width: aw };
+    const l = STROKE * 0.85;
+    const s = STROKE * 0.8;
+    const p1 = vBar(l, BASE, CAP);
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - STROKE, CAP);
+    p2.lineTo(aw - STROKE - s, CAP);
+    p2.lineTo(l + STROKE * 1.5, XH + 40);
+    p2.lineTo(l + STROKE * 2.2, XH + 10);
+    p2.close();
+    const p3 = new opentype.Path();
+    p3.moveTo(aw - STROKE, BASE);
+    p3.lineTo(aw - STROKE - s, BASE + STROKE);
+    p3.lineTo(l + STROKE * 1.5, XH - 40);
+    p3.lineTo(l + STROKE * 2.2, XH - 10);
+    p3.close();
+    return { path: mergePaths(p1, p2, p3), width: aw };
   },
   "L": () => {
     const aw = WIDTH.default;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP));
-    p.extend(hBar(40, left, aw - STROKE * 0.4));
-    return { path: p, width: aw };
+    const l = STROKE * 0.85;
+    return {
+      path: mergePaths(
+        vBar(l, BASE, CAP),
+        hBar(BASE + 40, l, aw - STROKE * 0.5)
+      ),
+      width: aw
+    };
   },
   "M": () => {
     const aw = WIDTH.wide + 40;
-    const p = new opentype.Path();
-    const s = STROKE * 0.88;
-    p.extend(vBar(STROKE, 0, CAP, s));
-    p.extend(vBar(aw - STROKE * 1.8, 0, CAP, s));
-    p.moveTo(STROKE + s, CAP);
-    p.lineTo(aw / 2, CAP * 0.4);
-    p.lineTo(aw - STROKE * 1.8 - s, CAP);
-    p.lineTo(aw - STROKE * 1.8 - s * 1.4, CAP);
-    p.lineTo(aw / 2, CAP * 0.52);
-    p.lineTo(STROKE + s * 1.4, CAP);
-    p.close();
-    return { path: p, width: aw };
+    const s = STROKE * 0.9;
+    const left = vBar(STROKE, BASE, CAP, s);
+    const right = vBar(aw - STROKE * 1.8, BASE, CAP, s);
+    const mid = new opentype.Path();
+    mid.moveTo(STROKE + s, CAP);
+    mid.lineTo(aw / 2, CAP * 0.45);
+    mid.lineTo(aw - STROKE * 1.8 - s, CAP);
+    mid.lineTo(aw - STROKE * 1.8 - s * 1.4, CAP);
+    mid.lineTo(aw / 2, CAP * 0.56);
+    mid.lineTo(STROKE + s * 1.4, CAP);
+    mid.close();
+    return { path: mergePaths(left, right, mid), width: aw };
   },
   "N": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
     const s = STROKE * 0.9;
-    p.extend(vBar(STROKE, 0, CAP, s));
-    p.extend(vBar(aw - STROKE * 1.6, 0, CAP, s));
-    p.moveTo(STROKE + s, CAP);
-    p.lineTo(STROKE + s * 1.6, CAP);
-    p.lineTo(aw - STROKE * 1.6 - s, 0);
-    p.lineTo(aw - STROKE * 1.6 - s * 1.6, 0);
-    p.close();
-    return { path: p, width: aw };
+    const left = vBar(STROKE, BASE, CAP, s);
+    const right = vBar(aw - STROKE * 1.6, BASE, CAP, s);
+    const diag = new opentype.Path();
+    diag.moveTo(STROKE + s, CAP);
+    diag.lineTo(STROKE + s * 1.7, CAP);
+    diag.lineTo(aw - STROKE * 1.6 - s, BASE);
+    diag.lineTo(aw - STROKE * 1.6 - s * 1.7, BASE);
+    diag.close();
+    return { path: mergePaths(left, right, diag), width: aw };
   },
   "O": () => {
     const aw = WIDTH.wide;
-    const outer = roundRect(STROKE * 0.8, 40, aw - STROKE * 1.6, CAP - 80, 90);
-    const inner = roundRect(STROKE * 0.8 + 55, 40 + 55, aw - STROKE * 1.6 - 110, CAP - 80 - 110, 70);
-    const p = new opentype.Path();
-    p.commands = outer.commands.concat(inner.commands);
-    return { path: p, width: aw };
+    const outer = roundRect(STROKE, BASE + 40, aw - STROKE * 2, CAP - 80, 110);
+    const inner = roundRect(STROKE + 70, BASE + 90, aw - STROKE * 2 - 140, CAP - 180, 80);
+    return { path: mergePaths(outer, inner), width: aw };
   },
   "P": () => {
     const aw = WIDTH.default;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP));
-    p.extend(roundRect(left, CAP - 290, aw - left * 1.7, 210, 50));
-    return { path: p, width: aw };
+    const l = STROKE * 0.85;
+    const stem = vBar(l, BASE, CAP, STROKE * 0.9);
+    const bowl = roundRect(l, CAP - 290, aw - l * 1.7, 210, 60);
+    return { path: mergePaths(stem, bowl), width: aw };
   },
   "Q": () => {
-    const aw = WIDTH.wide;
-    const base = glyphBuilders["O"]();
-    const p = new opentype.Path();
-    p.commands = base.path.commands.slice();
-    p.moveTo(aw * 0.55, 120);
-    p.lineTo(aw * 0.8, -10);
-    p.lineTo(aw * 0.75, 40);
-    p.lineTo(aw * 0.52, 155);
-    p.close();
-    return { path: p, width: aw };
+    const base = upperBuilders["O"]();
+    const aw = base.width;
+    const tail = new opentype.Path();
+    tail.moveTo(aw * 0.55, BASE + 140);
+    tail.lineTo(aw * 0.82, BASE - 10);
+    tail.lineTo(aw * 0.76, BASE + 70);
+    tail.lineTo(aw * 0.50, BASE + 170);
+    tail.close();
+    return { path: mergePaths(base.path, tail), width: aw };
   },
   "R": () => {
     const aw = WIDTH.wide;
-    const left = STROKE * 0.85;
-    const p = new opentype.Path();
-    p.extend(vBar(left, 0, CAP));
-    p.extend(roundRect(left, CAP - 290, aw - left * 1.9, 210, 50));
-    p.moveTo(aw - STROKE, 0);
-    p.lineTo(aw - STROKE * 1.5, STROKE * 0.9);
-    p.lineTo(left + STROKE * 1.5, XH - 40);
-    p.lineTo(left + STROKE * 2.0, XH - 80);
-    p.close();
-    return { path: p, width: aw };
+    const l = STROKE * 0.85;
+    const stem = vBar(l, BASE, CAP, STROKE * 0.9);
+    const bowl = roundRect(l, CAP - 290, aw - l * 1.9, 210, 50);
+    const leg = new opentype.Path();
+    leg.moveTo(aw - STROKE, BASE);
+    leg.lineTo(aw - STROKE - STROKE * 0.9, BASE + STROKE);
+    leg.lineTo(l + STROKE * 1.8, XH - 40);
+    leg.lineTo(l + STROKE * 2.4, XH - 80);
+    leg.close();
+    return { path: mergePaths(stem, bowl, leg), width: aw };
   },
   "S": () => {
     const aw = WIDTH.default;
     const p = new opentype.Path();
-    p.moveTo(aw - 40, CAP - 40);
-    p.quadraticCurveTo(aw * 0.35, CAP + 10, STROKE * 0.6, CAP - 120);
-    p.quadraticCurveTo(-10, CAP - 220, aw * 0.3, CAP - 260);
-    p.quadraticCurveTo(aw - 30, CAP - 320, aw - 40, CAP - 380);
-    p.quadraticCurveTo(aw + 10, CAP - 460, aw * 0.5, CAP - 520);
-    p.quadraticCurveTo(40, CAP - 540, 40, CAP - 420);
-    p.quadraticCurveTo(40, CAP - 320, aw * 0.4, CAP - 270);
-    p.quadraticCurveTo(aw - 20, CAP - 220, aw - 40, CAP - 140);
-    p.quadraticCurveTo(aw + 10, CAP - 40, aw * 0.5, 10);
-    p.quadraticCurveTo(40, 40, 40, 120);
-    p.quadraticCurveTo(40, 220, aw * 0.5, 260);
-    p.quadraticCurveTo(aw - 30, 300, aw - 40, 380);
+    const top = CAP - 20;
+    const mid = (CAP + BASE) / 2;
+    const bot = BASE + 40;
+    p.moveTo(aw - 40, top);
+    p.quadraticCurveTo(aw * 0.2, CAP + 10, 60, mid + 90);
+    p.quadraticCurveTo(20, mid + 10, aw * 0.3, mid - 40);
+    p.quadraticCurveTo(aw - 20, mid - 90, aw - 40, bot - 10);
+    p.quadraticCurveTo(aw * 0.5, bot - 70, 80, bot + 10);
+    p.quadraticCurveTo(aw * 0.5, bot + 40, aw - 40, top - 40);
     p.close();
     return { path: p, width: aw };
   },
   "T": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
-    p.extend(hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4));
     const c = aw / 2 - STROKE / 2;
-    p.extend(vBar(c, 0, CAP, STROKE * 0.9));
-    return { path: p, width: aw };
+    return {
+      path: mergePaths(
+        hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4),
+        vBar(c, BASE, CAP, STROKE * 0.9)
+      ),
+      width: aw
+    };
   },
   "U": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
     const s = STROKE * 0.9;
-    const left = STROKE;
-    const right = aw - STROKE * 2;
-    p.extend(vBar(left, 180, CAP, s));
-    p.extend(vBar(right, 180, CAP, s));
-    p.extend(roundRect(left, 40, right - left + s, 160, 70));
-    return { path: p, width: aw };
+    const left = vBar(STROKE, BASE + 140, CAP, s);
+    const right = vBar(aw - STROKE * 2, BASE + 140, CAP, s);
+    const bowl = roundRect(STROKE, BASE + 40, aw - STROKE * 3, 140, 80);
+    return { path: mergePaths(left, right, bowl), width: aw };
   },
   "V": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
-    const mid = aw / 2;
     const s = STROKE * 0.9;
-    p.moveTo(STROKE, CAP);
-    p.lineTo(STROKE + s, CAP);
-    p.lineTo(mid, 40);
-    p.lineTo(mid - s, 40);
-    p.close();
-    p.moveTo(aw - STROKE, CAP);
-    p.lineTo(aw - STROKE - s, CAP);
-    p.lineTo(mid, 40);
-    p.lineTo(mid + s, 40);
-    p.close();
-    return { path: p, width: aw };
+    const mid = aw / 2;
+    const p1 = new opentype.Path();
+    p1.moveTo(STROKE, CAP);
+    p1.lineTo(STROKE + s, CAP);
+    p1.lineTo(mid, BASE);
+    p1.lineTo(mid - s, BASE);
+    p1.close();
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - STROKE, CAP);
+    p2.lineTo(aw - STROKE - s, CAP);
+    p2.lineTo(mid, BASE);
+    p2.lineTo(mid + s, BASE);
+    p2.close();
+    return { path: mergePaths(p1, p2), width: aw };
   },
   "W": () => {
     const aw = WIDTH.wide + 80;
-    const p = new opentype.Path();
     const s = STROKE * 0.8;
     const x1 = STROKE;
     const x2 = aw * 0.34;
     const x3 = aw * 0.66;
     const x4 = aw - STROKE;
     const yTop = CAP;
-    const yBot = 40;
+    const yBot = BASE;
+    const p = new opentype.Path();
     p.moveTo(x1, yTop);
     p.lineTo(x1 + s, yTop);
     p.lineTo(x2, yBot);
@@ -355,143 +367,576 @@ const glyphBuilders = {
   },
   "X": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
     const s = STROKE * 0.8;
-    p.moveTo(STROKE, CAP);
-    p.lineTo(STROKE + s, CAP);
-    p.lineTo(aw - STROKE, 0);
-    p.lineTo(aw - STROKE - s, 0);
-    p.close();
-    p.moveTo(aw - STROKE, CAP);
-    p.lineTo(aw - STROKE - s, CAP);
-    p.lineTo(STROKE, 0);
-    p.lineTo(STROKE + s, 0);
-    p.close();
-    return { path: p, width: aw };
+    const p1 = new opentype.Path();
+    p1.moveTo(STROKE, CAP);
+    p1.lineTo(STROKE + s, CAP);
+    p1.lineTo(aw - STROKE, BASE);
+    p1.lineTo(aw - STROKE - s, BASE);
+    p1.close();
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - STROKE, CAP);
+    p2.lineTo(aw - STROKE - s, CAP);
+    p2.lineTo(STROKE, BASE);
+    p2.lineTo(STROKE + s, BASE);
+    p2.close();
+    return { path: mergePaths(p1, p2), width: aw };
   },
   "Y": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
     const s = STROKE * 0.85;
     const mid = aw / 2;
-    p.moveTo(STROKE, CAP);
-    p.lineTo(STROKE + s, CAP);
-    p.lineTo(mid, XH);
-    p.lineTo(mid - s, XH);
-    p.close();
-    p.moveTo(aw - STROKE, CAP);
-    p.lineTo(aw - STROKE - s, CAP);
-    p.lineTo(mid, XH);
-    p.lineTo(mid + s, XH);
-    p.close();
-    p.extend(vBar(mid - s / 2, 0, XH));
-    return { path: p, width: aw };
+    const arms1 = new opentype.Path();
+    arms1.moveTo(STROKE, CAP);
+    arms1.lineTo(STROKE + s, CAP);
+    arms1.lineTo(mid, XH);
+    arms1.lineTo(mid - s, XH);
+    arms1.close();
+    const arms2 = new opentype.Path();
+    arms2.moveTo(aw - STROKE, CAP);
+    arms2.lineTo(aw - STROKE - s, CAP);
+    arms2.lineTo(mid, XH);
+    arms2.lineTo(mid + s, XH);
+    arms2.close();
+    const stem = vBar(mid - s / 2, BASE, XH, s * 0.9);
+    return { path: mergePaths(arms1, arms2, stem), width: aw };
   },
   "Z": () => {
     const aw = WIDTH.wide;
-    const p = new opentype.Path();
-    p.extend(hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4));
-    p.extend(hBar(40, STROKE * 0.6, aw - STROKE * 0.4));
-    p.moveTo(aw - STROKE * 0.8, CAP - STROKE * 1.1);
-    p.lineTo(aw - STROKE * 1.5, CAP - STROKE * 1.1);
-    p.lineTo(STROKE * 0.6, 40 + STROKE * 1.1);
-    p.lineTo(STROKE * 1.3, 40 + STROKE * 1.1);
-    p.close();
-    return { path: p, width: aw };
+    const top = hBar(CAP, STROKE * 0.4, aw - STROKE * 0.4);
+    const bot = hBar(BASE + 40, STROKE * 0.6, aw - STROKE * 0.4);
+    const diag = new opentype.Path();
+    diag.moveTo(aw - STROKE * 0.9, CAP - STROKE);
+    diag.lineTo(aw - STROKE * 1.5, CAP - STROKE);
+    diag.lineTo(STROKE * 0.7, BASE + 40 + STROKE);
+    diag.lineTo(STROKE * 1.3, BASE + 40 + STROKE);
+    diag.close();
+    return { path: mergePaths(top, bot, diag), width: aw };
   }
 };
 
-function buildDigit(d) {
-  const aw = WIDTH.default;
-  const p = roundRect(STROKE * 0.9, 80, aw - STROKE * 1.8, CAP - 160, 80);
-  if ("0698".includes(d)) {
-    const inner = roundRect(
-      STROKE * 0.9 + 55,
-      80 + 55,
-      aw - STROKE * 1.8 - 110,
-      CAP - 160 - 110,
-      60
-    );
-    const path = new opentype.Path();
-    path.commands = p.commands.concat(inner.commands);
-    return { path, width: aw };
-  }
-  if ("13".includes(d)) {
-    const path = new opentype.Path();
-    path.extend(vBar(aw / 2 - STROKE * 0.4, 60, CAP - 20, STROKE * 0.8));
-    if (d === "3") {
-      path.extend(roundRect(aw / 2 - 40, CAP - 260, 150, 90, 40));
-      path.extend(roundRect(aw / 2 - 40, 100, 150, 90, 40));
-    }
-    return { path, width: aw };
-  }
-  if ("24".includes(d)) {
-    const path = new opentype.Path();
-    if (d === "2") {
-      path.extend(hBar(CAP - 20, STROKE * 0.6, aw - STROKE * 0.6));
-      path.extend(roundRect(aw - 170, 200, 120, 100, 40));
-      path.extend(hBar(80, STROKE * 0.6, aw - STROKE * 0.6));
-    } else {
-      path.extend(vBar(STROKE * 0.8, 200, CAP, STROKE * 0.8));
-      path.extend(hBar(200, STROKE * 0.8, aw - STROKE * 0.8));
-      path.extend(vBar(aw - STROKE * 1.6, 60, CAP, STROKE * 0.8));
-    }
-    return { path, width: aw };
-  }
-  if ("57".includes(d)) {
-    const path = new opentype.Path();
-    if (d === "5") {
-      path.extend(hBar(CAP - 20, STROKE * 0.6, aw - STROKE * 0.6));
-      path.extend(hBar(200, STROKE * 0.6, aw - STROKE * 0.6));
-      path.extend(vBar(STROKE * 0.6, 200, CAP, STROKE * 0.7));
-      path.extend(roundRect(aw - 200, 80, 140, 120, 50));
-    } else {
-      path.extend(vBar(aw - STROKE * 1.6, 200, CAP, STROKE * 0.8));
-      path.extend(hBar(CAP - 20, STROKE * 0.6, aw - STROKE * 0.6));
-      path.extend(roundRect(STROKE * 0.6, 60, 160, 120, 60));
-    }
-    return { path, width: aw };
-  }
-  return { path: p, width: aw };
-}
+/* Lowercase: softer, shorter, consistent with uppercase rhythm */
 
-function spacing(ch) {
-  if (ch === "I") return WIDTH.narrow;
-  if ("MW".includes(ch)) return WIDTH.wide + 40;
-  if (ch === "1") return WIDTH.narrow;
+function lcStemLeft() {
+  return STROKE * 0.9;
+}
+function lcXWidth() {
   return WIDTH.default;
 }
 
+const lowerBuilders = {
+  "a": () => {
+    const aw = lcXWidth();
+    const bowl = roundRect(60, BASE + 80, aw - 120, XH - 100, 70);
+    const inner = roundRect(90, BASE + 110, aw - 180, XH - 160, 50);
+    const stem = vBar(aw - 120, XH - 40, XH + 40, STROKE * 0.7);
+    return { path: mergePaths(bowl, inner, stem), width: aw };
+  },
+  "b": () => {
+    const aw = lcXWidth();
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE, CAP, STROKE * 0.8);
+    const bowl = roundRect(x, BASE + 80, aw - x - 40, XH - 80, 70);
+    return { path: mergePaths(stem, bowl), width: aw };
+  },
+  "c": () => {
+    const aw = lcXWidth();
+    const outer = roundRect(60, BASE + 80, aw - 120, XH - 80, 80);
+    const inner = roundRect(100, BASE + 110, aw - 200, XH - 140, 60);
+    return { path: mergePaths(outer, inner), width: aw };
+  },
+  "d": () => {
+    const aw = lcXWidth();
+    const stemX = aw - lcStemLeft() - STROKE * 0.2;
+    const stem = vBar(stemX, BASE, CAP, STROKE * 0.8);
+    const bowl = roundRect(60, BASE + 80, aw - 120, XH - 80, 70);
+    return { path: mergePaths(bowl, stem), width: aw };
+  },
+  "e": () => {
+    const aw = lcXWidth();
+    const outer = roundRect(60, BASE + 80, aw - 120, XH - 80, 80);
+    const bar = hBar(XH - 20, 80, aw - 80, STROKE * 0.6);
+    return { path: mergePaths(outer, bar), width: aw };
+  },
+  "f": () => {
+    const aw = WIDTH.narrow;
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE - 40, CAP, STROKE * 0.7);
+    const bar = hBar(XH, x - 10, aw - 40, STROKE * 0.55);
+    return { path: mergePaths(stem, bar), width: aw };
+  },
+  "g": () => {
+    const aw = lcXWidth();
+    const bowl = roundRect(60, BASE + 80, aw - 120, XH - 80, 70);
+    const tail = roundRect(aw / 2 - 40, DSC, 80, BASE + 80 - DSC, 40);
+    return { path: mergePaths(bowl, tail), width: aw };
+  },
+  "h": () => {
+    const aw = lcXWidth();
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE, CAP, STROKE * 0.8);
+    const arch = roundRect(x, XH - 80, aw - x - 40, 80, 50);
+    return { path: mergePaths(stem, arch), width: aw };
+  },
+  "i": () => {
+    const aw = WIDTH.narrow;
+    const stem = vBar(aw / 2 - STROKE * 0.35, BASE, XH, STROKE * 0.7);
+    const dot = roundRect(aw / 2 - 18, XH + 60, 36, 36, 18);
+    return { path: mergePaths(stem, dot), width: aw };
+  },
+  "j": () => {
+    const aw = WIDTH.narrow;
+    const stem = vBar(aw / 2 - STROKE * 0.35, DSC, XH, STROKE * 0.7);
+    const dot = roundRect(aw / 2 - 18, XH + 60, 36, 36, 18);
+    return { path: mergePaths(stem, dot), width: aw };
+  },
+  "k": () => {
+    const aw = lcXWidth();
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE, CAP, STROKE * 0.8);
+    const arm = new opentype.Path();
+    arm.moveTo(x + STROKE * 0.8, XH - 10);
+    arm.lineTo(aw - 40, BASE);
+    arm.lineTo(aw - 70, BASE);
+    arm.lineTo(x + STROKE * 0.6, XH - 40);
+    arm.close();
+    const arm2 = new opentype.Path();
+    arm2.moveTo(x + STROKE * 0.8, XH + 10);
+    arm2.lineTo(aw - 60, CAP * 0.55);
+    arm2.lineTo(aw - 90, CAP * 0.55);
+    arm2.lineTo(x + STROKE * 0.6, XH + 40);
+    arm2.close();
+    return { path: mergePaths(stem, arm, arm2), width: aw };
+  },
+  "l": () => {
+    const aw = WIDTH.narrow;
+    const stem = vBar(aw / 2 - STROKE * 0.35, BASE, CAP, STROKE * 0.7);
+    return { path: stem, width: aw };
+  },
+  "m": () => {
+    const aw = WIDTH.wide + 40;
+    const x = lcStemLeft();
+    const s1 = vBar(x, BASE, XH, STROKE * 0.7);
+    const arch1 = roundRect(x, XH - 70, (aw - x) / 2 - 40, 70, 40);
+    const s2x = x + (aw - x) / 2 - 20;
+    const s2 = vBar(s2x, BASE, XH, STROKE * 0.7);
+    const arch2 = roundRect(s2x, XH - 70, aw - s2x - 40, 70, 40);
+    return { path: mergePaths(s1, arch1, s2, arch2), width: aw };
+  },
+  "n": () => {
+    const aw = lcXWidth();
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE, XH, STROKE * 0.7);
+    const arch = roundRect(x, XH - 70, aw - x - 40, 70, 40);
+    return { path: mergePaths(stem, arch), width: aw };
+  },
+  "o": () => {
+    const aw = lcXWidth();
+    const outer = roundRect(60, BASE + 80, aw - 120, XH - 80, 80);
+    const inner = roundRect(95, BASE + 110, aw - 190, XH - 140, 60);
+    return { path: mergePaths(outer, inner), width: aw };
+  },
+  "p": () => {
+    const aw = lcXWidth();
+    const x = lcStemLeft();
+    const stem = vBar(x, DSC, XH, STROKE * 0.8);
+    const bowl = roundRect(x, BASE + 80, aw - x - 40, XH - 80, 70);
+    return { path: mergePaths(stem, bowl), width: aw };
+  },
+  "q": () => {
+    const aw = lcXWidth();
+    const stemX = aw - lcStemLeft() - STROKE * 0.2;
+    const stem = vBar(stemX, DSC, XH, STROKE * 0.8);
+    const bowl = roundRect(60, BASE + 80, aw - 120, XH - 80, 70);
+    return { path: mergePaths(bowl, stem), width: aw };
+  },
+  "r": () => {
+    const aw = WIDTH.default;
+    const x = lcStemLeft();
+    const stem = vBar(x, BASE, XH, STROKE * 0.7);
+    const shoulder = hBar(XH - 10, x + STROKE * 0.6, aw - 80, STROKE * 0.55);
+    return { path: mergePaths(stem, shoulder), width: aw };
+  },
+  "s": () => {
+    const aw = lcXWidth();
+    const p = new opentype.Path();
+    const top = XH - 10;
+    const mid = (XH + BASE + 80) / 2;
+    const bot = BASE + 80;
+    p.moveTo(aw - 40, top);
+    p.quadraticCurveTo(aw * 0.2, XH + 20, 60, mid + 30);
+    p.quadraticCurveTo(20, mid - 10, aw * 0.3, mid - 40);
+    p.quadraticCurveTo(aw - 20, mid - 70, aw - 40, bot - 10);
+    p.quadraticCurveTo(aw * 0.5, bot - 40, 60, bot + 10);
+    p.quadraticCurveTo(aw * 0.6, bot + 20, aw - 40, top - 40);
+    p.close();
+    return { path: p, width: aw };
+  },
+  "t": () => {
+    const aw = WIDTH.narrow;
+    const stem = vBar(aw / 2 - STROKE * 0.35, BASE, CAP - 40, STROKE * 0.7);
+    const bar = hBar(XH, 40, aw - 40, STROKE * 0.55);
+    return { path: mergePaths(stem, bar), width: aw };
+  },
+  "u": () => {
+    const aw = lcXWidth();
+    const bowl = roundRect(60, BASE + 40, aw - 120, XH - 40, 70);
+    const rightStem = vBar(aw - 100, BASE + 40, XH, STROKE * 0.7);
+    return { path: mergePaths(bowl, rightStem), width: aw };
+  },
+  "v": () => {
+    const aw = lcXWidth();
+    const s = STROKE * 0.7;
+    const mid = aw / 2;
+    const p1 = new opentype.Path();
+    p1.moveTo(60, XH);
+    p1.lineTo(60 + s, XH);
+    p1.lineTo(mid, BASE);
+    p1.lineTo(mid - s, BASE);
+    p1.close();
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - 60, XH);
+    p2.lineTo(aw - 60 - s, XH);
+    p2.lineTo(mid, BASE);
+    p2.lineTo(mid + s, BASE);
+    p2.close();
+    return { path: mergePaths(p1, p2), width: aw };
+  },
+  "w": () => {
+    const aw = WIDTH.wide + 40;
+    const s = STROKE * 0.65;
+    const x1 = 50;
+    const x2 = aw * 0.36;
+    const x3 = aw * 0.64;
+    const x4 = aw - 50;
+    const yTop = XH;
+    const yBot = BASE;
+    const p = new opentype.Path();
+    p.moveTo(x1, yTop);
+    p.lineTo(x1 + s, yTop);
+    p.lineTo(x2, yBot);
+    p.lineTo(x2 - s, yBot);
+    p.close();
+    p.moveTo(x2, yBot);
+    p.lineTo(x2 + s, yBot);
+    p.lineTo(x3, yTop * 0.55);
+    p.lineTo(x3 - s, yTop * 0.55);
+    p.close();
+    p.moveTo(x3, yTop * 0.55);
+    p.lineTo(x3 + s, yTop * 0.55);
+    p.lineTo(x4, yTop);
+    p.lineTo(x4 - s, yTop);
+    p.close();
+    return { path: p, width: aw };
+  },
+  "x": () => {
+    const aw = lcXWidth();
+    const s = STROKE * 0.65;
+    const p1 = new opentype.Path();
+    p1.moveTo(60, XH);
+    p1.lineTo(60 + s, XH);
+    p1.lineTo(aw - 60, BASE);
+    p1.lineTo(aw - 60 - s, BASE);
+    p1.close();
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - 60, XH);
+    p2.lineTo(aw - 60 - s, XH);
+    p2.lineTo(60, BASE);
+    p2.lineTo(60 + s, BASE);
+    p2.close();
+    return { path: mergePaths(p1, p2), width: aw };
+  },
+  "y": () => {
+    const aw = lcXWidth();
+    const s = STROKE * 0.7;
+    const mid = aw / 2;
+    const p1 = new opentype.Path();
+    p1.moveTo(60, XH);
+    p1.lineTo(60 + s, XH);
+    p1.lineTo(mid, BASE);
+    p1.lineTo(mid - s, BASE);
+    p1.close();
+    const p2 = new opentype.Path();
+    p2.moveTo(aw - 60, XH);
+    p2.lineTo(aw - 60 - s, XH);
+    p2.lineTo(mid, DSC);
+    p2.lineTo(mid + s, DSC);
+    p2.close();
+    return { path: mergePaths(p1, p2), width: aw };
+  },
+  "z": () => {
+    const aw = lcXWidth();
+    const top = hBar(XH, 60, aw - 60, STROKE * 0.55);
+    const bot = hBar(BASE + 40, 60, aw - 60, STROKE * 0.55);
+    const diag = new opentype.Path();
+    diag.moveTo(aw - 60, XH - STROKE * 0.5);
+    diag.lineTo(aw - 80, XH - STROKE * 0.5);
+    diag.lineTo(60, BASE + 40 + STROKE * 0.5);
+    diag.lineTo(80, BASE + 40 + STROKE * 0.5);
+    diag.close();
+    return { path: mergePaths(top, bot, diag), width: aw };
+  }
+};
+
+/* Digits: rounded rectangular, consistent weight */
+
+function digitBuilder(d) {
+  const aw = WIDTH.default;
+  switch (d) {
+    case "0": {
+      const outer = roundRect(80, BASE + 40, aw - 160, CAP - 160, 90);
+      const inner = roundRect(120, BASE + 80, aw - 240, CAP - 240, 70);
+      return { path: mergePaths(outer, inner), width: aw };
+    }
+    case "1": {
+      const stem = vBar(aw / 2 - STROKE * 0.4, BASE + 40, CAP - 40, STROKE * 0.8);
+      const base = hBar(BASE + 40, aw / 2 - 80, aw / 2 + 80, STROKE * 0.7);
+      return { path: mergePaths(stem, base), width: aw };
+    }
+    case "2": {
+      const top = hBar(CAP - 40, 80, aw - 80, STROKE * 0.7);
+      const curve = new opentype.Path();
+      curve.moveTo(aw - 80, CAP - 40);
+      curve.quadraticCurveTo(aw - 10, XH + 40, aw * 0.4, XH);
+      curve.quadraticCurveTo(80, XH - 40, 80, BASE + 40);
+      const base = hBar(BASE + 40, 80, aw - 80, STROKE * 0.7);
+      return { path: mergePaths(top, curve, base), width: aw };
+    }
+    case "3": {
+      const top = roundRect(80, CAP - 260, aw - 160, 90, 40);
+      const bot = roundRect(80, BASE + 80, aw - 160, 90, 40);
+      const mid = new opentype.Path();
+      mid.moveTo(aw - 80, CAP - 170);
+      mid.quadraticCurveTo(aw, XH, aw - 80, BASE + 170);
+      mid.quadraticCurveTo(aw - 40, BASE + 210, aw - 40, BASE + 230);
+      return { path: mergePaths(top, bot, mid), width: aw };
+    }
+    case "4": {
+      const stem = vBar(aw - 120, BASE + 40, CAP, STROKE * 0.8);
+      const diag = new opentype.Path();
+      diag.moveTo(80, CAP - 180);
+      diag.lineTo(80 + STROKE * 0.7, CAP - 180);
+      diag.lineTo(aw - 120, BASE + 40);
+      diag.lineTo(aw - 140, BASE + 40);
+      diag.close();
+      const bar = hBar(CAP - 200, 80, aw - 120, STROKE * 0.7);
+      return { path: mergePaths(stem, diag, bar), width: aw };
+    }
+    case "5": {
+      const top = hBar(CAP - 40, 80, aw - 80, STROKE * 0.7);
+      const left = vBar(80, CAP - 260, CAP - 40, STROKE * 0.7);
+      const mid = hBar(CAP - 260, 80, aw - 80, STROKE * 0.7);
+      const bowl = roundRect(80, BASE + 80, aw - 160, 120, 60);
+      return { path: mergePaths(top, left, mid, bowl), width: aw };
+    }
+    case "6": {
+      const loop = roundRect(80, BASE + 40, aw - 160, CAP - 220, 80);
+      const inner = roundRect(120, BASE + 80, aw - 240, CAP - 260, 60);
+      const hook = new opentype.Path();
+      hook.moveTo(aw - 80, CAP - 220);
+      hook.quadraticCurveTo(aw - 10, CAP - 260, aw - 60, CAP - 320);
+      return { path: mergePaths(loop, inner, hook), width: aw };
+    }
+    case "7": {
+      const top = hBar(CAP - 40, 80, aw - 80, STROKE * 0.7);
+      const diag = new opentype.Path();
+      diag.moveTo(aw - 80, CAP - 40);
+      diag.lineTo(aw - 80 - STROKE * 0.8, CAP - 40);
+      diag.lineTo(80, BASE + 40);
+      diag.lineTo(80 + STROKE * 0.8, BASE + 40);
+      diag.close();
+      return { path: mergePaths(top, diag), width: aw };
+    }
+    case "8": {
+      const top = roundRect(90, CAP - 260, aw - 180, 110, 50);
+      const bot = roundRect(90, BASE + 60, aw - 180, 140, 60);
+      const midHole = roundRect(120, BASE + 110, aw - 240, 60, 30);
+      return { path: mergePaths(top, bot, midHole), width: aw };
+    }
+    case "9": {
+      const loop = roundRect(80, BASE + 160, aw - 160, CAP - 220, 80);
+      const inner = roundRect(120, BASE + 180, aw - 240, CAP - 260, 60);
+      const hook = new opentype.Path();
+      hook.moveTo(80, BASE + 160);
+      hook.quadraticCurveTo(40, BASE + 120, 80, BASE + 80);
+      return { path: mergePaths(loop, inner, hook), width: aw };
+    }
+    default:
+      return { path: new opentype.Path(), width: aw };
+  }
+}
+
+/* Punctuation & symbols */
+
+function punctBuilder(ch) {
+  const aw = WIDTH.default;
+  if (ch === ".") {
+    return {
+      path: roundRect(aw / 2 - 16, BASE + 40, 32, 40, 16),
+      width: WIDTH.space
+    };
+  }
+  if (ch === ",") {
+    const p = roundRect(aw / 2 - 16, BASE + 40, 32, 40, 16);
+    const tail = new opentype.Path();
+    tail.moveTo(aw / 2 + 4, BASE + 40);
+    tail.lineTo(aw / 2 + 20, BASE - 10);
+    tail.lineTo(aw / 2 + 4, BASE);
+    tail.close();
+    return { path: mergePaths(p, tail), width: WIDTH.space };
+  }
+  if (ch === ":" || ch === ";") {
+    const top = roundRect(aw / 2 - 16, XH - 40, 32, 40, 16);
+    const bot = roundRect(aw / 2 - 16, BASE + 40, 32, 40, 16);
+    let p = mergePaths(top, bot);
+    if (ch === ";") {
+      const tail = new opentype.Path();
+      tail.moveTo(aw / 2 + 4, BASE + 40);
+      tail.lineTo(aw / 2 + 20, BASE - 10);
+      tail.lineTo(aw / 2 + 4, BASE);
+      tail.close();
+      p = mergePaths(p, tail);
+    }
+    return { path: p, width: WIDTH.space };
+  }
+  if (ch === "!") {
+    const stem = vBar(aw / 2 - STROKE * 0.3, BASE + 120, CAP, STROKE * 0.6);
+    const dot = roundRect(aw / 2 - 16, BASE + 40, 32, 40, 16);
+    return { path: mergePaths(stem, dot), width: WIDTH.narrow };
+  }
+  if (ch === "?") {
+    const hook = new opentype.Path();
+    hook.moveTo(aw / 2 - 40, CAP - 180);
+    hook.quadraticCurveTo(aw - 40, CAP, aw - 40, XH);
+    hook.quadraticCurveTo(aw - 40, XH - 40, aw / 2, XH - 60);
+    hook.lineTo(aw / 2, BASE + 120);
+    const dot = roundRect(aw / 2 - 16, BASE + 40, 32, 40, 16);
+    return { path: mergePaths(hook, dot), width: aw };
+  }
+  if (ch === "-" || ch === "–" || ch === "—") {
+    const len = ch === "-" ? aw * 0.4 : ch === "–" ? aw * 0.6 : aw * 0.9;
+    const bar = hBar(BASE + 260, (aw - len) / 2, (aw + len) / 2, STROKE * 0.4);
+    return { path: bar, width: len + 80 };
+  }
+  if (ch === "(" || ch === ")") {
+    const p = new opentype.Path();
+    const left = ch === "(";
+    const x = left ? aw / 2 - 40 : aw / 2 + 40;
+    const dir = left ? -1 : 1;
+    p.moveTo(x + dir * 20, CAP - 40);
+    p.quadraticCurveTo(x + dir * 80, (CAP + BASE) / 2, x + dir * 20, BASE + 40);
+    p.quadraticCurveTo(x + dir * 40, BASE + 80, x + dir * 40, BASE + 120);
+    return { path: p, width: WIDTH.space + 40 };
+  }
+  if (ch === "'") {
+    const p = new opentype.Path();
+    p.moveTo(aw / 2 - 10, CAP);
+    p.lineTo(aw / 2 + 10, CAP);
+    p.lineTo(aw / 2, CAP - 60);
+    p.close();
+    return { path: p, width: WIDTH.space };
+  }
+  if (ch === "\"") {
+    const left = punctBuilder("'").path;
+    const right = new opentype.Path();
+    right.commands = left.commands.map(cmd => {
+      const c = { ...cmd };
+      if (c.x !== undefined) c.x += 24;
+      if (c.x1 !== undefined) c.x1 += 24;
+      if (c.x2 !== undefined) c.x2 += 24;
+      return c;
+    });
+    return { path: mergePaths(left, right), width: WIDTH.space + 16 };
+  }
+  if (ch === "@") {
+    const outer = roundRect(40, BASE + 40, aw + 120, CAP - 160, 90);
+    const inner = roundRect(120, BASE + 80, aw, CAP - 220, 70);
+    return { path: mergePaths(outer, inner), width: aw + 160 };
+  }
+  if (ch === "#") {
+    const bar1 = hBar(XH + 40, 80, aw - 80, STROKE * 0.35);
+    const bar2 = hBar(BASE + 200, 80, aw - 80, STROKE * 0.35);
+    const v1 = vBar(aw / 2 - 70, BASE + 40, CAP - 40, STROKE * 0.35);
+    const v2 = vBar(aw / 2 + 20, BASE + 40, CAP - 40, STROKE * 0.35);
+    return { path: mergePaths(bar1, bar2, v1, v2), width: aw };
+  }
+  if (ch === "$") {
+    const s = digitBuilder("5").path;
+    return { path: s, width: aw };
+  }
+  if (ch === "%") {
+    const slash = new opentype.Path();
+    slash.moveTo(80, BASE + 40);
+    slash.lineTo(120, BASE + 40);
+    slash.lineTo(aw - 80, CAP - 40);
+    slash.lineTo(aw - 120, CAP - 40);
+    slash.close();
+    const o1 = roundRect(80, CAP - 220, 80, 80, 30);
+    const o2 = roundRect(aw - 160, BASE + 40, 80, 80, 30);
+    return { path: mergePaths(slash, o1, o2), width: aw };
+  }
+  if (ch === "&") {
+    const p = new opentype.Path();
+    p.moveTo(aw - 80, CAP - 220);
+    p.quadraticCurveTo(aw - 40, CAP - 320, aw / 2, CAP - 320);
+    p.quadraticCurveTo(40, CAP - 320, 40, CAP - 200);
+    p.quadraticCurveTo(40, CAP - 80, aw / 2, CAP - 80);
+    p.quadraticCurveTo(aw, CAP - 60, aw / 2, BASE + 40);
+    p.quadraticCurveTo(40, BASE, aw / 2, BASE);
+    return { path: p, width: aw };
+  }
+  if (ch === "*") {
+    const p = new opentype.Path();
+    const cx = aw / 2;
+    const cy = (BASE + CAP) / 2;
+    const r0 = 40;
+    for (let i = 0; i < 6; i++) {
+      const a1 = (Math.PI * 2 * i) / 6;
+      const a2 = (Math.PI * 2 * (i + 1)) / 6;
+      p.moveTo(cx, cy);
+      p.lineTo(cx + r0 * Math.cos(a1), cy + r0 * Math.sin(a1));
+      p.lineTo(cx + r0 * Math.cos(a2), cy + r0 * Math.sin(a2));
+      p.close();
+    }
+    return { path: p, width: aw };
+  }
+  if (ch === "+") {
+    const h = hBar((BASE + CAP) / 2 + STROKE * 0.2, 80, aw - 80, STROKE * 0.5);
+    const v = vBar(aw / 2 - STROKE * 0.25, BASE + 80, CAP - 80, STROKE * 0.5);
+    return { path: mergePaths(h, v), width: aw };
+  }
+  if (ch === "/") {
+    const p = new opentype.Path();
+    p.moveTo(aw - 80, CAP);
+    p.lineTo(aw - 120, CAP);
+    p.lineTo(80, BASE);
+    p.lineTo(120, BASE);
+    p.close();
+    return { path: p, width: aw };
+  }
+  if (ch === "=") {
+    const h1 = hBar((BASE + CAP) / 2 + 40, 80, aw - 80, STROKE * 0.4);
+    const h2 = hBar((BASE + CAP) / 2 - 40, 80, aw - 80, STROKE * 0.4);
+    return { path: mergePaths(h1, h2), width: aw };
+  }
+  if (ch === "_") {
+    const bar = hBar(BASE + 10, 40, aw - 40, STROKE * 0.25);
+    return { path: bar, width: aw };
+  }
+  return { path: new opentype.Path(), width: aw };
+}
+
+/* Public builder */
+
 export function buildGlyph(ch) {
-  const p = new opentype.Path();
-  let width = spacing(ch);
-  if (glyphBuilders[ch]) {
-    const { path, width: w } = glyphBuilders[ch]();
-    return { path, width: w || width };
-  }
-  if (/[0-9]/.test(ch)) {
-    const { path: dp, width: w } = buildDigit(ch);
-    return { path: dp, width: w };
-  }
   if (ch === " ") {
     return { path: new opentype.Path(), width: WIDTH.space };
   }
-  if (".,:;!?".includes(ch)) {
-    const dot = roundRect(WIDTH.default / 2 - 24, 40, 48, 70, 20);
-    return { path: dot, width: WIDTH.default / 2 };
-  }
-  if ("-–—".includes(ch)) {
-    const len = ch === "-" ? WIDTH.default / 2 : WIDTH.wide * 0.8;
-    const bar = hBar(XH / 2, 40, 40 + len, STROKE * 0.45);
-    return { path: bar, width: len + 80 };
-  }
-  if (ch === "@") {
-    const outer = roundRect(40, 80, WIDTH.wide + 40, CAP - 200, 80);
-    const inner = roundRect(120, 130, WIDTH.wide - 40, CAP - 300, 60);
-    const path = new opentype.Path();
-    path.commands = outer.commands.concat(inner.commands);
-    return { path, width: WIDTH.wide + 80 };
-  }
+  if (upperBuilders[ch]) return upperBuilders[ch]();
+  if (lowerBuilders[ch]) return lowerBuilders[ch]();
+  if (CHARSET.digits.includes(ch)) return digitBuilder(ch);
+  if (COMMON_PUNCT.includes(ch)) return punctBuilder(ch);
+  // Fallback: empty but with width, to avoid system fallback.
   return { path: new opentype.Path(), width: WIDTH.default };
 }
 
@@ -500,3 +945,11 @@ export const METRICS = {
   ascender: ASC,
   descender: DSC
 };
+
+export const SUPPORTED_CHARS = (() => {
+  const set = new Set();
+  for (const s of Object.values(CHARSET)) for (const ch of s) set.add(ch);
+  for (const ch of COMMON_PUNCT) set.add(ch);
+  set.add(" ");
+  return Array.from(set);
+})();
