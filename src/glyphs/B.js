@@ -3,9 +3,7 @@ const makeGlyph = (opentype, name, unicode, cmds, adv) =>
     name,
     unicode,
     advanceWidth: adv,
-    path: cmds(
-      new opentype.Path()
-    )
+    path: cmds(new opentype.Path())
   });
 
 export const glyphB = (opentype, adv) =>
@@ -14,26 +12,46 @@ export const glyphB = (opentype, adv) =>
     "B",
     "B".codePointAt(0),
     (p) => {
-      p.moveTo(120, 0);
-      p.lineTo(120, 800);
-      p.lineTo(360, 800);
-      p.curveTo(470, 800, 540, 730, 540, 640);
-      p.curveTo(540, 560, 500, 510, 430, 490);
-      p.curveTo(520, 470, 570, 410, 570, 320);
-      p.curveTo(570, 190, 480, 120, 340, 120);
-      p.lineTo(120, 120);
+      p.moveTo(100, 0);
+      p.lineTo(100, 700);
+      p.lineTo(340, 700);
+      p.curveTo(450, 700, 520, 640, 520, 560);
+      p.curveTo(520, 500, 480, 450, 420, 430);
+      p.curveTo(490, 410, 540, 360, 540, 280);
+      p.curveTo(540, 180, 460, 120, 340, 120);
+      p.lineTo(100, 120);
       p.close();
-      p.moveTo(210, 180);
-      p.lineTo(340, 180);
-      p.curveTo(420, 180, 460, 220, 460, 300);
-      p.curveTo(460, 380, 420, 420, 340, 420);
-      p.lineTo(210, 420);
+      p.moveTo(160, 60);
+      p.lineTo(340, 60);
+      p.curveTo(490, 60, 600, 140, 600, 280);
+      p.curveTo(600, 390, 520, 460, 420, 470);
+      p.lineTo(420, 410);
+      p.curveTo(460, 410, 460, 360, 460, 360);
+      p.curveTo(460, 360, 460, 310, 420, 310);
+      p.lineTo(340, 310);
+      p.lineTo(340, 370);
+      p.lineTo(380, 370);
+      p.curveTo(440, 370, 460, 410, 460, 460);
+      p.curveTo(460, 510, 440, 550, 380, 550);
+      p.lineTo(340, 550);
+      p.lineTo(340, 640);
+      p.lineTo(340, 640);
+      p.curveTo(420, 640, 460, 600, 460, 560);
+      p.curveTo(460, 520, 420, 480, 340, 480);
+      p.lineTo(160, 480);
       p.close();
-      p.moveTo(210, 480);
-      p.lineTo(350, 480);
-      p.curveTo(420, 480, 450, 510, 450, 580);
-      p.curveTo(450, 650, 420, 680, 350, 680);
-      p.lineTo(210, 680);
+      p.moveTo(160, 60);
+      p.lineTo(340, 60);
+      p.curveTo(430, 60, 480, 110, 480, 180);
+      p.lineTo(480, 280);
+      p.curveTo(480, 350, 430, 400, 340, 400);
+      p.lineTo(160, 400);
+      p.close();
+      p.moveTo(160, 460);
+      p.lineTo(330, 460);
+      p.curveTo(410, 460, 460, 500, 460, 560);
+      p.curveTo(460, 620, 410, 640, 330, 640);
+      p.lineTo(160, 640);
       p.close();
       return p;
     },
@@ -46,21 +64,21 @@ export const glyphb = (opentype, adv) =>
     "b",
     "b".codePointAt(0),
     (p) => {
-      p.moveTo(120, 0);
-      p.lineTo(120, 800);
-      p.lineTo(200, 800);
-      p.lineTo(200, 460);
-      p.curveTo(240, 510, 300, 540, 360, 540);
-      p.curveTo(470, 540, 550, 450, 550, 320);
-      p.curveTo(550, 190, 470, 100, 360, 100);
-      p.curveTo(290, 100, 230, 130, 190, 190);
-      p.lineTo(190, 0);
+      p.moveTo(100, 0);
+      p.lineTo(100, 720);
+      p.lineTo(160, 720);
+      p.lineTo(160, 440);
+      p.curveTo(200, 470, 250, 490, 310, 490);
+      p.curveTo(430, 490, 520, 400, 520, 280);
+      p.curveTo(520, 160, 430, 70, 310, 70);
+      p.curveTo(250, 70, 200, 90, 160, 120);
+      p.lineTo(160, 0);
       p.close();
-      p.moveTo(360, 160);
-      p.curveTo(430, 160, 480, 210, 480, 320);
-      p.curveTo(480, 430, 430, 480, 360, 480);
-      p.curveTo(290, 480, 240, 430, 240, 320);
-      p.curveTo(240, 210, 290, 160, 360, 160);
+      p.moveTo(310, 130);
+      p.curveTo(400, 130, 460, 190, 460, 280);
+      p.curveTo(460, 370, 400, 430, 310, 430);
+      p.curveTo(220, 430, 160, 370, 160, 280);
+      p.curveTo(160, 190, 220, 130, 310, 130);
       p.close();
       return p;
     },
