@@ -40,33 +40,28 @@ export const glyphg=(opentype,adv)=>
     "g",
     "g".codePointAt(0),
     p=>{
-      const cx=300,cy=210;
-      const rO=170,rI=110;
-      const linkY=-10;
-      const earX=430,earY=390;
-      p.moveTo(cx+rO,cy);
-      p.curveTo(cx+rO,cy+95,cx+95,cy+rO,cx,cy+rO);
-      p.curveTo(cx-95,cy+rO,cx-rO,cy+95,cx-rO,cy);
-      p.curveTo(cx-rO,cy-95,cx-95,cy-rO,cx,cy-rO);
-      p.curveTo(cx+95,cy-rO,cx+rO,cy-95,cx+rO,cy);
-      p.close();
-      p.moveTo(cx+rI,cy);
-      p.curveTo(cx+rI,cy+65,cx+65,cy+rI,cx,cy+rI);
-      p.curveTo(cx-65,cy+rI,cx-rI,cy+65,cx-rI,cy);
-      p.curveTo(cx-rI,cy-65,cx-65,cy-rI,cx,cy-rI);
-      p.curveTo(cx+65,cy-rI,cx+rI,cy-65,cx+rI,cy);
-      p.close();
-      p.moveTo(cx-40,linkY);
-      p.curveTo(cx-120,linkY-70,cx-60,-150,cx+40,-150);
-      p.curveTo(cx+150,-150,cx+190,-70,cx+140,-10);
-      p.lineTo(cx+90,-40);
-      p.curveTo(cx+120,-80,cx+110,-110,cx+60,-110);
-      p.curveTo(cx+10,-110,cx-10,-70,cx-10,-30);
-      p.close();
-      p.moveTo(earX-40,earY);
-      p.lineTo(earX+40,earY);
-      p.lineTo(earX+30,470);
-      p.lineTo(earX-30,470);
+      p.moveTo(310,-10);
+      p.curveTo(250,-10,200,10,160,40);
+      p.lineTo(160,0);
+      p.lineTo(100,0);
+      p.lineTo(100,480);
+      p.lineTo(160,480);
+      p.lineTo(160,440);
+      p.curveTo(200,470,250,490,310,490);
+      p.curveTo(430,490,520,400,520,240);
+      p.curveTo(520,110,460,40,370,10);
+      p.curveTo(360,-40,320,-70,260,-70);
+      p.curveTo(180,-70,120,-30,90,40);
+      p.lineTo(140,70);
+      p.curveTo(165,20,205,-10,260,-10);
+      p.curveTo(300,-10,330,10,350,50);
+      p.curveTo(270,60,210,100,180,160);
+      p.lineTo(230,190);
+      p.curveTo(250,140,290,110,350,110);
+      p.curveTo(400,110,460,150,460,240);
+      p.curveTo(460,370,400,430,310,430);
+      p.curveTo(220,430,160,370,160,240);
+      p.curveTo(160,110,220,50,310,50);
       p.close();
       return p;
     },
