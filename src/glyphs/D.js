@@ -37,22 +37,22 @@ export const glyphd=(opentype,adv)=>
     "d",
     "d".codePointAt(0),
     p=>{
-      p.moveTo(290,-10);
-      p.curveTo(240,-10,200,10,170,40);
-      p.lineTo(170,0);
-      p.lineTo(110,0);
-      p.lineTo(110,720);
-      p.lineTo(170,720);
-      p.lineTo(170,360);
-      p.curveTo(200,390,240,410,290,410);
-      p.curveTo(410,410,490,330,490,200);
-      p.curveTo(490,70,410,-10,290,-10);
+      p.moveTo(310,-10);
+      p.curveTo(190,-10,100,80,100,240);
+      p.curveTo(100,400,190,490,310,490);
+      p.curveTo(360,490,400,470,430,440);
+      p.lineTo(430,720);
+      p.lineTo(490,720);
+      p.lineTo(490,0);
+      p.lineTo(430,0);
+      p.lineTo(430,40);
+      p.curveTo(400,10,360,-10,310,-10);
       p.close();
-      p.moveTo(290,50);
-      p.curveTo(370,50,430,110,430,200);
-      p.curveTo(430,290,370,350,290,350);
-      p.curveTo(210,350,170,290,170,200);
-      p.curveTo(170,110,210,50,290,50);
+      p.moveTo(310,50);
+      p.curveTo(400,50,460,110,460,240);
+      p.curveTo(460,370,400,430,310,430);
+      p.curveTo(220,430,160,370,160,240);
+      p.curveTo(160,110,220,50,310,50);
       p.close();
       return p;
     },
