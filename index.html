@@ -127,62 +127,9 @@
   <h1>Stain Font Preview</h1>
   <p>
     Compare the in-progress "Stain" typeface against your system text (ideally Candara) in light mode.
-    Only A, B, C / a, b, c are currently implemented.
+    Full A-Z alphabet implemented.
   </p>
 
   <div class="controls">
-    <span class="tag">A B C a b c</span>
-    <span>Size</span>
-    <input id="size" type="range" min="18" max="96" value="40" />
-    <span id="sizeVal">40px</span>
-    <span>Letter spacing</span>
-    <input id="track" type="range" min="-10" max="40" value="3" />
-    <span id="trackVal">0.03em</span>
-  </div>
-
-  <div class="input-wrap">
-    <span>Sample text:</span>
-    <input id="text" value="ABC abc" />
-  </div>
-
-  <div class="grid">
-    <section class="panel">
-      <div class="label">Stain</div>
-      <div id="stainSample" class="sample stain">ABC abc</div>
-    </section>
-
-    <section class="panel">
-      <div class="label">System (Candara / fallback)</div>
-      <div id="sysSample" class="sample sys">ABC abc</div>
-    </section>
-  </div>
-
-  <script>
-    const text = document.getElementById("text");
-    const size = document.getElementById("size");
-    const sizeVal = document.getElementById("sizeVal");
-    const track = document.getElementById("track");
-    const trackVal = document.getElementById("trackVal");
-    const stainSample = document.getElementById("stainSample");
-    const sysSample = document.getElementById("sysSample");
-
-    const update = () => {
-      const v = text.value || "ABC abc";
-      const fs = size.valueAsNumber || 40;
-      const ls = (track.valueAsNumber || 0) / 100;
-      sizeVal.textContent = fs + "px";
-      trackVal.textContent = ls.toFixed(2) + "em";
-      [stainSample, sysSample].forEach(el => {
-        el.textContent = v;
-        el.style.fontSize = fs + "px";
-        el.style.letterSpacing = ls + "em";
-      });
-    };
-
-    text.addEventListener("input", update);
-    size.addEventListener("input", update);
-    track.addEventListener("input", update);
-    update();
-  </script>
-</body>
-</html>
+    <span class="tag">A-Z a-z</span>
+    <span>Size
