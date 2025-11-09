@@ -29,13 +29,16 @@ jobs:
       - name: Build font
         run: npm run build:font
 
+      - name: Validate font
+        run: npm run test
+
       - name: Commit generated fonts
         run: |
           if [ -n "$(git status --porcelain dist)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add dist
-            git commit -m "chore: build StainFont Basic"
+            git commit -m "chore: build Stain Regular"
             git push
           else
             echo "No changes in dist; skipping commit."
