@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import opentype from "opentype.js";
+import { SUPPORTED_CHARS } from "../src/glyphs.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,8 +19,12 @@ try {
     console.error("Font has no glyphs");
     process.exit(1);
   }
-  const required = ["A", "B", "C", "D", "E", "F", "G"];
-  for (const ch of required) {
+  const sample = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (const ch of sample) {
+    if (!SUPPORTED_CHARS.includes(ch)) {
+      console.error("Missing from SUPPORTED_CHARS:", ch);
+      process.exit(1);
+    }
     const g = font.charToGlyph(ch);
     if (!g || !g.path || g.path.commands.length === 0) {
       console.error("Missing or empty glyph for", ch);
