@@ -1,65 +1,62 @@
-const makeGlyph = (opentype, name, unicode, cmds, adv) =>
-  new opentype.Glyph({
-    name,
-    unicode,
-    advanceWidth: adv,
-    path: cmds(new opentype.Path())
-  });
+const makeGlyph=(opentype,name,unicode,cmds,adv)=>
+  new opentype.Glyph({name,unicode,advanceWidth:adv,path:cmds(new opentype.Path())});
 
-export const glyphG = (opentype, adv) =>
+export const glyphG=(opentype,adv)=>
   makeGlyph(
     opentype,
     "G",
     "G".codePointAt(0),
-    (p) => {
-      p.moveTo(350, -10);
-      p.curveTo(190, -10, 80, 100, 80, 280);
-      p.lineTo(80, 420);
-      p.curveTo(80, 600, 190, 710, 350, 710);
-      p.curveTo(460, 710, 540, 660, 580, 570);
-      p.lineTo(520, 540);
-      p.curveTo(490, 610, 430, 650, 350, 650);
-      p.curveTo(220, 650, 140, 570, 140, 420);
-      p.lineTo(140, 280);
-      p.curveTo(140, 130, 220, 50, 350, 50);
-      p.curveTo(450, 50, 520, 100, 540, 190);
-      p.lineTo(340, 190);
-      p.lineTo(340, 250);
-      p.lineTo(600, 250);
-      p.lineTo(600, 220);
-      p.curveTo(600, 70, 500, -10, 350, -10);
+    p=>{
+      const cx=320,ro=270,ri=200,midY=320;
+      p.moveTo(cx,50);
+      p.curveTo(cx-160,50,120,150,120,280);
+      p.lineTo(120,420);
+      p.curveTo(120,580,220,680,340,680);
+      p.curveTo(440,680,510,640,550,560);
+      p.lineTo(500,530);
+      p.curveTo(470,590,420,620,340,620);
+      p.curveTo(240,620,180,550,180,420);
+      p.lineTo(180,280);
+      p.curveTo(180,160,250,90,340,90);
+      p.curveTo(430,90,500,140,500,240);
+      p.lineTo(380,240);
+      p.lineTo(380,300);
+      p.lineTo(560,300);
+      p.lineTo(560,220);
+      p.curveTo(560,100,460,50,340,50);
       p.close();
       return p;
     },
     adv
   );
 
-export const glyphg = (opentype, adv) =>
+export const glyphg=(opentype,adv)=>
   makeGlyph(
     opentype,
     "g",
     "g".codePointAt(0),
-    (p) => {
-      p.moveTo(450, 480);
-      p.lineTo(300, 480);
-      p.curveTo(180, 480, 90, 380, 90, 240);
-      p.curveTo(90, 100, 180, 0, 300, 0);
-      p.lineTo(450, 0);
+    p=>{
+      const cx=300;
+      p.moveTo(cx,-160);
+      p.curveTo(180,-160,110,-110,100,-40);
+      p.lineTo(160,-20);
+      p.curveTo(170,-70,210,-100,280,-100);
+      p.curveTo(380,-100,430,-50,430,40);
+      p.lineTo(430,70);
+      p.curveTo(400,20,350,-10,280,-10);
+      p.curveTo(180,-10,100,70,100,210);
+      p.curveTo(100,350,180,430,280,430);
+      p.curveTo(350,430,400,400,430,350);
+      p.lineTo(430,480);
+      p.lineTo(490,480);
+      p.lineTo(490,40);
+      p.curveTo(490,-90,410,-160,300,-160);
       p.close();
-      p.moveTo(300, 60);
-      p.curveTo(210, 60, 150, 130, 150, 240);
-      p.curveTo(150, 350, 210, 420, 300, 420);
-      p.lineTo(390, 420);
-      p.lineTo(390, 60);
-      p.close();
-      p.moveTo(450, 420);
-      p.lineTo(450, -150);
-      p.curveTo(450, -210, 380, -250, 300, -250);
-      p.curveTo(220, -250, 150, -210, 150, -150);
-      p.lineTo(210, -150);
-      p.curveTo(210, -180, 250, -200, 300, -200);
-      p.curveTo(350, -200, 390, -180, 390, -150);
-      p.lineTo(390, 420);
+      p.moveTo(280,50);
+      p.curveTo(360,50,430,120,430,210);
+      p.curveTo(430,300,360,370,280,370);
+      p.curveTo(200,370,160,300,160,210);
+      p.curveTo(160,120,200,50,280,50);
       p.close();
       return p;
     },
