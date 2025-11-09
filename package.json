@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:font": "node scripts/build-font.mjs",
+    "build:font": "node scripts/build-font.js",
     "build": "npm run build:font"
   },
   "dependencies": {
