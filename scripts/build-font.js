@@ -41,7 +41,27 @@ const ascender = 800;
 const descender = -200;
 const defaultAdv = 600;
 
+const mkGlyph = (name, unicode, adv, pathFn) =>
+  new opentype.Glyph({
+    name,
+    unicode,
+    advanceWidth: adv,
+    path: pathFn(new opentype.Path())
+  });
+
+const glyphSpace = mkGlyph("space", " ".codePointAt(0), 260, (p) => p);
+const glyphPeriod = mkGlyph("period", ".".codePointAt(0), 260, (p) => {
+  p.moveTo(80, 0);
+  p.lineTo(80, 120);
+  p.lineTo(180, 120);
+  p.lineTo(180, 0);
+  p.close();
+  return p;
+});
+
 const glyphList = [
+  glyphSpace,
+  glyphPeriod,
   glyphA(opentype, defaultAdv),
   glypha(opentype, defaultAdv),
   glyphB(opentype, defaultAdv),
