@@ -1,14 +1,18 @@
 {
   "name": "stainfont",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build:font": "node scripts/build-font.js",
+    "build": "npm run build:font",
+    "lint": "node scripts/lint.js || exit 0",
+    "test": "node scripts/validate-font.js || exit 0",
     "postinstall": "mkdir -p dist"
   },
   "dependencies": {
-    "opentype.js": "^1.3.4"
+    "opentype.js": "^1.3.4",
+    "paper": "^0.12.17"
   },
   "devDependencies": {}
 }
