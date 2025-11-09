@@ -45,27 +45,22 @@ export const glyphq=(opentype,adv)=>
     "q",
     "q".codePointAt(0),
     p=>{
-      p.moveTo(310,-10);
-      p.curveTo(250,-10,200,10,160,40);
-      p.lineTo(160,0);
-      p.lineTo(100,0);
-      p.lineTo(100,480);
-      p.lineTo(160,480);
-      p.lineTo(160,440);
-      p.curveTo(200,470,250,490,310,490);
-      p.curveTo(430,490,520,400,520,240);
-      p.curveTo(520,80,430,-10,310,-10);
+      p.moveTo(290,-10);
+      p.curveTo(170,-10,90,70,90,200);
+      p.curveTo(90,330,170,410,290,410);
+      p.curveTo(340,410,380,390,410,360);
+      p.lineTo(410,480);
+      p.lineTo(470,480);
+      p.lineTo(470,-150);
+      p.lineTo(410,-150);
+      p.lineTo(410,40);
+      p.curveTo(380,10,340,-10,290,-10);
       p.close();
-      p.moveTo(310,50);
-      p.curveTo(400,50,460,110,460,240);
-      p.curveTo(460,370,400,430,310,430);
-      p.curveTo(220,430,160,370,160,240);
-      p.curveTo(160,110,220,50,310,50);
-      p.close();
-      p.moveTo(460,-150);
-      p.lineTo(460,0);
-      p.lineTo(520,0);
-      p.lineTo(520,-150);
+      p.moveTo(290,50);
+      p.curveTo(370,50,410,110,410,200);
+      p.curveTo(410,290,370,350,290,350);
+      p.curveTo(210,350,150,290,150,200);
+      p.curveTo(150,110,210,50,290,50);
       p.close();
       return p;
     },
