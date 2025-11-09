@@ -4,24 +4,43 @@
 <meta charset="UTF-8" />
 <title>StainFont Preview</title>
 <style>
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   padding: 2rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, -sans-serif;
   background: #050505;
   color: #f5f5f5;
 }
 h1 {
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   font-weight: 600;
+  letter-spacing: 0.03em;
+}
+h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+p {
+  margin: 0.25rem 0;
+  opacity: 0.85;
+  font-size: 0.9rem;
 }
 label {
   display: block;
-  margin: 1rem 0 0.5rem;
+  margin: 1.5rem 0 0.4rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
 }
 textarea {
   width: 100%;
-  max-width: 720px;
+  max-width: 900px;
   height: 120px;
   padding: 0.75rem;
   border-radius: 4px;
@@ -30,76 +49,155 @@ textarea {
   color: #f5f5f5;
   resize: vertical;
   font-size: 1rem;
-}
-.preview {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  max-width: 720px;
-  border-radius: 4px;
-  background: #111;
-  border: 1px solid #333;
-  font-size: 2.25rem;
-  line-height: 1.25;
+  line-height: 1.5;
 }
 .controls {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   display: flex;
-  gap: 1rem;
   flex-wrap: wrap;
+  gap: 0.75rem;
 }
-button {
-  padding: 0.5rem 1rem;
+button,
+a.button-link {
+  padding: 0.5rem 1.1rem;
   border-radius: 4px;
   border: none;
   cursor: pointer;
   background: #f5f5f5;
   color: #000;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
 }
-button:hover {
+button:hover,
+a.button-link:hover {
   background: #ddd;
 }
-.small {
-  font-size: 0.75rem;
-  opacity: 0.75;
+.preview-wrap {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.9rem;
+  max-width: 900px;
+}
+.preview {
+  padding: 1.1rem 1rem 1.2rem;
+  border-radius: 4px;
+  background: #111;
+  border: 1px solid #333;
+}
+.preview-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  margin-bottom: 0.35rem;
+}
+.preview-text {
+  font-size: 2.1rem;
+  line-height: 1.25;
+}
+.preview-text.small {
+  font-size: 1.1rem;
+}
+.preview-text.mono {
+  font-size: 0.85rem;
 }
 @font-face {
-  font-family: "StainFont Basic";
-  src: url("./dist/StainFont-Basic.ttf") format("truetype");
+  font-family: "Stain";
+  src: url("./dist/Stain-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-.preview.stain {
-  font-family: "StainFont Basic", system-ui, sans-serif;
+.preview-text.stain {
+  font-family: "Stain", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.preview-text.system {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.note {
+  margin-top: 2rem;
+  max-width: 900px;
+  font-size: 0.78rem;
+  opacity: 0.6;
+  line-height: 1.6;
 }
 </style>
 </head>
 <body>
-<h1>StainFont Basic Preview</h1>
-<div class="small">
-  This is a generated test font. The AI-driven glyph design will plug into the build script.
-</div>
-<label for="text">Preview text</label>
-<textarea id="text">STAIN FONT – AI DESIGNED. 0123456789 !?@#</textarea>
+<h1>StainFont Regular</h1>
+<p>A readable experimental sans serif inspired by Candara’s soft geometry.</p>
+
+<label for="text">Custom Preview Text</label>
+<textarea id="text">StainFont Regular — CLEAN, HUMAN, READABLE.
+The quick brown fox jumps over the lazy dog 0123456789.</textarea>
+
 <div class="controls">
-  <button id="useSystem">Use system font</button>
-  <button id="useStain">Use StainFont Basic</button>
-  <a href="./dist/StainFont-Basic.ttf" download="StainFont-Basic.ttf">
-    <button type="button">Download TTF</button>
+  <button id="btnSystem">Use system font</button>
+  <button id="btnStain">Use StainFont</button>
+  <a class="button-link" href="./dist/Stain-Regular.ttf" download="Stain-Regular.ttf">
+    Download TTF
   </a>
 </div>
-<div class="preview stain" id="preview">
-  STAIN FONT – AI DESIGNED. 0123456789 !?@
+
+<div class="preview-wrap">
+  <div class="preview">
+    <div class="preview-label">StainFont — Large Display</div>
+    <div class="preview-text stain" id="pvDisplay">
+      StainFont Regular — CLEAN, HUMAN, READABLE.
+    </div>
+  </div>
+  <div class="preview">
+    <div class="preview-label">StainFont — Sentence Case</div>
+    <div class="preview-text stain small" id="pvSentence">
+      The quick brown fox jumps over the lazy dog 0123456789.
+    </div>
+  </div>
+  <div class="preview">
+    <div class="preview-label">System vs Stain Comparison (same text)</div>
+    <div class="preview-text system mono" id="pvSys">
+      StainFont mirrors a soft sans like Candara.
+    </div>
+    <div class="preview-text stain mono" id="pvStain">
+      StainFont mirrors a soft sans like Candara.
+    </div>
+  </div>
 </div>
+
+<div class="note">
+  This page uses a generated TTF from the repository build scripts.
+  Update the generator to iterate on proportions, contrast, and spacing as needed.
+</div>
+
+<script src="./vendor/paper-full.min.js"></script>
 <script>
-const t=document.getElementById("text");
-const p=document.getElementById("preview");
-const bSys=document.getElementById("useSystem");
-const bStain=document.getElementById("useStain");
-t.addEventListener("input",()=>p.textContent=t.value||" ");
-bSys.addEventListener("click",()=>p.classList.remove("stain"));
-bStain.addEventListener("click",()=>p.classList.add("stain"));
+const textArea = document.getElementById("text");
+const pvDisplay = document.getElementById("pvDisplay");
+const pvSentence = document.getElementById("pvSentence");
+const btnSystem = document.getElementById("btnSystem");
+const btnStain = document.getElementById("btnStain");
+
+function syncText() {
+  const v = textArea.value || " ";
+  pvDisplay.textContent = v;
+  pvSentence.textContent = v;
+}
+textArea.addEventListener("input", syncText);
+syncText();
+
+btnSystem.addEventListener("click", () => {
+  document.querySelectorAll(".preview-text").forEach(el => {
+    el.classList.remove("stain");
+    el.classList.add("system");
+  });
+});
+btnStain.addEventListener("click", () => {
+  document.querySelectorAll(".preview-text").forEach(el => {
+    el.classList.remove("system");
+    el.classList.add("stain");
+  });
+});
 </script>
 </body>
 </html>
