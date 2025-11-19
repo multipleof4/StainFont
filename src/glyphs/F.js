@@ -1,57 +1,12 @@
-const makeGlyph = (opentype, name, unicode, cmds, adv) =>
-  new opentype.Glyph({
-    name,
-    unicode,
-    advanceWidth: adv,
-    path: cmds(new opentype.Path())
-  });
-
-export const glyphF = (opentype, adv) =>
-  makeGlyph(
-    opentype,
-    "F",
-    "F".codePointAt(0),
-    (p) => {
-      p.moveTo(100, 0);
-      p.lineTo(100, 700);
-      p.lineTo(520, 700);
-      p.lineTo(520, 640);
-      p.lineTo(160, 640);
-      p.lineTo(160, 380);
-      p.lineTo(480, 380);
-      p.lineTo(480, 320);
-      p.lineTo(160, 320);
-      p.lineTo(160, 0);
-      p.close();
-      return p;
-    },
-    adv
-  );
-
-export const glyphf = (opentype, adv) =>
-  makeGlyph(
-    opentype,
-    "f",
-    "f".codePointAt(0),
-    (p) => {
-      p.moveTo(180, 0);
-      p.lineTo(180, 420);
-      p.lineTo(80, 420);
-      p.lineTo(80, 480);
-      p.lineTo(180, 480);
-      p.lineTo(180, 580);
-      p.curveTo(180, 670, 230, 720, 320, 720);
-      p.curveTo(360, 720, 390, 710, 420, 690);
-      p.lineTo(390, 640);
-      p.curveTo(370, 650, 350, 660, 320, 660);
-      p.curveTo(270, 660, 240, 630, 240, 580);
-      p.lineTo(240, 480);
-      p.lineTo(380, 480);
-      p.lineTo(380, 420);
-      p.lineTo(240, 420);
-      p.lineTo(240, 0);
-      p.close();
-      return p;
-    },
-    adv
-  );
+const mk=(o,n,u,d,w)=>new o.Glyph({name:n,unicode:u,advanceWidth:w,path:d(new o.Path())});
+export const glyphF=(o,w)=>mk(o,"F",70,p=>{
+  p.moveTo(80,0);p.lineTo(80,700);p.lineTo(520,700);p.lineTo(520,620);p.lineTo(160,620);
+  p.lineTo(160,390);p.lineTo(480,390);p.lineTo(480,310);p.lineTo(160,310);p.lineTo(160,0);p.close();
+  return p;
+},w);
+export const glyphf=(o,w)=>mk(o,"f",102,p=>{
+  p.moveTo(240,0);p.lineTo(240,420);p.lineTo(140,420);p.lineTo(140,490);p.lineTo(240,490);
+  p.lineTo(240,600);p.curveTo(240,710,380,710,380,710);p.lineTo(380,630);p.curveTo(320,630,320,600,320,600);
+  p.lineTo(320,490);p.lineTo(440,490);p.lineTo(440,420);p.lineTo(320,420);p.lineTo(320,0);p.close();
+  return p;
+},w);
