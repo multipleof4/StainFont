@@ -1,135 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>STAIN / TYPE</title>
-<style>
-  @font-face{font-family:'Stain';src:url('./dist/Stain.otf') format('opentype');}
-  :root{--bg:#ebe8e3;--ink:#080808;--accent:#d63c3c;}
-  *{box-sizing:border-box;cursor:default;}
-  ::selection{background:var(--accent);color:var(--bg);}
-  
-  body {
-    margin:0;padding:0;background:var(--bg);color:var(--ink);
-    font-family:'Stain', sans-serif;overflow-x:hidden;
-  }
-
-  /* SVG Filters for liquid text */
-  .distort { filter: url('#ink-bleed'); transition: filter 0.5s; }
-  .distort:hover { filter: url('#ink-motion'); }
-  
-  nav {
-    position:fixed;top:0;left:0;width:100%;padding:2rem;
-    display:flex;justify-content:space-between;align-items:baseline;
-    z-index:10;font-size:0.9rem;mix-blend-mode:multiply;pointer-events:none;
-  }
-  nav a { pointer-events:auto;color:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid transparent; }
-  nav a:hover { border-color:var(--ink); }
-
-  /* Main visual */
-  .hero {
-    height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
-    text-align:center;position:relative;
-  }
-  
-  h1 {
-    font-size:clamp(5rem,22vw,24rem);line-height:0.75;margin:0;
-    letter-spacing:-0.06em;white-space:nowrap;
-    will-change:filter;
-  }
-  
-  .tag { margin-top:2rem;font-family:sans-serif;text-transform:uppercase;font-size:0.8rem;opacity:0.6;letter-spacing:0.2em; }
-
-  /* Content blocks */
-  section { border-top:2px solid var(--ink);padding:4rem 2rem;max-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem; }
-  @media(max-width:800px){ section{grid-template-columns:1fr;} }
-
-  .label { font-family:sans-serif;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:1rem;opacity:0.5;position:sticky;top:4rem; }
-  
-  p.copy { font-size:clamp(1.5rem, 4vw, 3.5rem);line-height:1.1;margin:0;max-width:1200px; }
-  .accent { color:var(--accent); }
-
-  /* Input Area */
-  .input-zone { position:relative;grid-template-columns:1fr;min-height:80vh;display:flex;align-items:center;justify-content:center; }
-  textarea {
-    width:100%;background:transparent;border:none;color:var(--ink);
-    font-family:'Stain';font-size:clamp(3rem, 8vw, 8rem);line-height:0.9;
-    text-align:center;outline:none;resize:none;
-    min-height:50vh;overflow:hidden;
-  }
-
-  /* Footer */
-  footer { background:var(--ink);color:var(--bg);padding:4rem 2rem;text-align:center;font-family:sans-serif;font-size:0.8rem; }
-  footer a { color:#fff;text-decoration:none;opacity:0.6;margin:0 1rem; }
-  footer a:hover { opacity:1; }
-  
-  .dl-btn {
-    display:inline-block;margin-top:2rem;padding:1.5rem 4rem;
-    background:var(--bg);color:var(--ink);font-family:'Stain';font-size:2rem;
-    border-radius:50%;text-decoration:none;
-    transition:transform 0.3s ease;
-  }
-  .dl-btn:hover { transform:scale(1.1) rotate(-3deg); }
-
-</style>
+  <meta charset="UTF-8" />
+  <title>Stain Font</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f8f7f2;
+      --ink: #1a1a1a;
+      --accent: #a6a6a6;
+    }
+    @font-face { font-family: "Stain"; src: url("./dist/Stain.otf") format("opentype"); }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: var(--bg); color: var(--ink);
+      font-family: "Stain", sans-serif;
+      overflow-x: hidden;
+      padding: 2rem;
+    }
+    /* Creative ink stains */
+    .stain-mark {
+      position: absolute; z-index: -1; pointer-events: none; opacity: 0.06;
+      background: #000; border-radius: 50%; filter: blur(30px);
+    }
+    .s1 { top: -5%; left: -5%; width: 40vw; height: 40vw; }
+    .s2 { bottom: -10%; right: -5%; width: 50vw; height: 50vw; }
+    .s3 { top: 40%; left: 60%; width: 200px; height: 200px; filter: blur(60px); opacity: 0.08; }
+    
+    .container {
+      max-width: 900px; margin: 0 auto;
+      min-height: 85vh; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    header { 
+      text-align: center; 
+      border-bottom: 4px solid var(--ink); 
+      padding-bottom: 2rem; margin-bottom: 4rem;
+      border-radius: 0 0 50% 50% / 0 0 10px 10px; /* Ink bleed edge */
+    }
+    h1 { font-size: clamp(4rem, 15vw, 9rem); margin: 0; line-height: 0.8; text-transform: uppercase; }
+    
+    /* Dictionary definition block */
+    .def-block { margin-bottom: 4rem; }
+    .word { font-size: clamp(3rem, 8vw, 5rem); margin: 0 0 1rem; display: block; }
+    .pos { font-size: 1.5rem; color: var(--accent); display: block; margin-bottom: 1.5rem; font-style: italic; }
+    .meaning {
+      font-size: clamp(1.2rem, 3.5vw, 2rem); 
+      line-height: 1.2; 
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--accent);
+    }
+    
+    .info { text-align: center; font-size: 1.1rem; color: var(--accent); margin: 3rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .download-area { text-align: center; margin-top: auto; }
+    .btn {
+      display: inline-block; padding: 1.5rem 3rem;
+      font-size: 2rem; color: var(--bg); background: var(--ink);
+      text-decoration: none; border-radius: 90% 40% 80% 30% / 40% 80% 50% 70%; /* organic blot shape */
+      transition: 0.2s ease;
+    }
+    .btn:hover { transform: scale(1.05) rotate(-1deg); border-radius: 50% 90% 30% 80% / 90% 30% 70% 40%; }
+    .repo-link { display: block; margin-top: 2rem; color: var(--ink); text-decoration: none; font-size: 1rem; }
+    .repo-link:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
-  <!-- Filters -->
-  <svg style="width:0;height:0;position:absolute;" aria-hidden="true">
-    <filter id="ink-bleed">
-      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
-      <feGaussianBlur stdDeviation="0.5" />
-    </filter>
-    <filter id="ink-motion">
-      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise">
-        <animate attributeName="baseFrequency" values="0.04;0.02;0.04" dur="5s" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" />
-      <feGaussianBlur stdDeviation="1.2" />
-    </filter>
-  </svg>
+  <div class="stain-mark s1"></div>
+  <div class="stain-mark s2"></div>
+  <div class="stain-mark s3"></div>
 
-  <nav>
-    <div class="l">Stain . 0.2</div>
-    <div class="r">
-      <a href="#type">Test</a> &nbsp;/&nbsp; 
-      <a href="https://github.com/multipleof4/stain.otf">Source</a>
-    </div>
-  </nav>
+  <div class="container">
+    <header>
+      <h1>Stain Font</h1>
+    </header>
 
-  <div class="hero">
-    <h1 class="distort">STAIN</h1>
-    <span class="tag">Constructed Liquid Geometry</span>
+    <section class="def-block">
+      <span class="word">stain</span>
+      <span class="pos">noun</span>
+      <div class="meaning">1. a colored patch or dirty mark that is difficult to remove.</div>
+      <div class="meaning">2. a mark of disgrace associated with a particular circumstance quality or person.</div>
+    </section>
+
+    <section class="info">
+      A programmatic font inspired by Candara.<br>
+      Open Source. Public Domain.
+    </section>
+
+    <section class="download-area">
+      <a href="./dist/Stain.otf" class="btn" download>Download Stain.OTF</a>
+      <a href="https://github.com/multipleof4/stain.otf" class="repo-link">github.com / multipleof4 / stain.otf</a>
+    </section>
   </div>
-
-  <section>
-    <div><span class="label">Description</span></div>
-    <div>
-      <p class="copy">
-        Stain is a display typeface simulating ink absorption on porous paper. 
-        Strict Bezier curves compromised by <span class="accent">organic bleeding</span> logic.
-      </p>
-    </div>
-  </section>
-
-  <section id="type" class="input-zone">
-    <textarea id="txt" spellcheck="false">ink on paper</textarea>
-  </section>
-
-  <footer>
-    <a href="./dist/Stain.otf" class="dl-btn">Download</a><br><br><br>
-    <span>MIT License / CC0 Public Domain</span><br><br>
-    <a href="https://github.com/multipleof4/stain.otf">github.com/multipleof4/stain.otf</a>
-  </footer>
-
-  <script>
-    // Auto resize text area
-    const tx = document.getElementById('txt');
-    const rs = ()=> { tx.style.height='auto'; tx.style.height = tx.scrollHeight+'px'; };
-    tx.addEventListener('input', rs);
-    window.addEventListener('resize', rs);
-    rs();
-  </script>
 </body>
 </html>
+
