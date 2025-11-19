@@ -2,183 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>STAIN — A Work in Progress</title>
+  <title>stain</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root {
-      --bg: #fcfbf9;
-      --fg: #000;
-      --acc: #0044ff;
-      --border: #000;
-      --ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    *, *::before, *::after { box-sizing: border-box; }
+    :root { --bg: #111; --fg: #fafafa; --ui: system-ui, sans-serif; }
     body {
       margin: 0; padding: 2rem;
       background: var(--bg); color: var(--fg);
       font-family: var(--ui);
-      line-height: 1.4;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
     }
-    @font-face {
-      font-family: "Stain";
-      src: url("./dist/Stain.otf") format("opentype");
-      font-weight: 400;
-      font-display: swap;
-    }
-    .poster {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    header {
-      border-bottom: 4px solid var(--border);
-      padding-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    h1 {
-      font-family: "Stain", var(--ui);
-      font-size: clamp(3rem, 12vw, 9rem);
-      line-height: 0.85;
-      letter-spacing: -0.02em;
-      margin: 0;
-      text-transform: uppercase;
-    }
-    .meta {
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      letter-spacing: 0.05em;
-    }
-    .hero-text {
-      font-family: "Stain", var(--ui);
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1;
-      margin: 2rem 0;
-    }
-    .grid-spec {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      border-top: 1px solid var(--border);
-      padding-top: 2rem;
-    }
-    .panel {
-      background: #fff;
-      border: 2px solid var(--border);
-      padding: 1rem;
-      box-shadow: 6px 6px 0 var(--border);
-      display: flex; flex-direction: column;
-      min-height: 200px;
-    }
-    .panel h3 { margin: 0 0 0.5rem; font-size: 0.8rem; text-transform: uppercase; color: #666; }
-    .edit-box {
-      font-size: 2.5rem;
-      border: none;
-      outline: none;
-      resize: none;
-      width: 100%;
-      flex: 1;
-      background: transparent;
-    }
-    .stain { font-family: "Stain", sans-serif; }
-    .sys { font-family: var(--ui); }
-    
-    .toolbar {
-      position: sticky;
-      bottom: 2rem;
-      background: var(--fg);
-      color: var(--bg);
-      padding: 1rem 1.5rem;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      flex-wrap: wrap;
-    }
-    .tool-group { display: flex; align-items: center; gap: 0.5rem; }
-    input[type="range"] { accent-color: var(--acc); cursor: pointer; }
-    .btn {
-      background: var(--bg);
-      color: var(--fg);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 99px;
-      font-weight: bold;
-      transition: transform 0.1s;
-    }
-    .btn:hover { transform: scale(1.05); }
+    @font-face { font-family: "Stain"; src: url("./dist/Stain.otf") format("opentype"); }
+    .stain-font { font-family: "Stain"; }
+    .container { max-width: 800px; width: 100%; }
+    .entry { border-left: 1px solid #333; padding-left: 2rem; }
+    h1 { font-size: clamp(4rem, 15vw, 10rem); line-height: 0.8; margin: 0 0 1rem -0.5rem; font-weight: normal; }
+    .pos { font-size: 1.5rem; color: #888; margin-bottom: 2rem; display: block; font-style: italic; font-family: serif; } 
+    /* Note: "noun" rendered in stain font if pos class uses stain, but requested distinct "definition style" implies standard layout practices. Using Stain for definition text as requested. */
+    .def-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.5rem; }
+    .def-item { font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.1; color: #ccc; }
+    .footer { margin-top: 4rem; border-top: 1px solid #333; padding-top: 2rem; text-align: right; }
+    .btn { color: #fff; text-decoration: none; border: 1px solid #fff; padding: 0.8rem 2rem; border-radius: 2rem; transition: 0.2s; font-family: var(--ui); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
+    .btn:hover { background: #fff; color: #000; }
   </style>
 </head>
 <body>
-  <div class="poster">
-    <header>
-      <h1>Stain</h1>
-      <div class="meta">
-        V0.2.0 &bull; OpenType &bull; CC0
-      </div>
-    </header>
-
-    <section class="hero-text">
-      The quick brown fox jumps over the lazy dog.
-    </section>
-
-    <div class="grid-spec">
-      <div class="panel">
-        <h3>Stain (Humanist Sans)</h3>
-        <textarea class="edit-box stain" id="outStain" spellcheck="false">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz</textarea>
-      </div>
-      <div class="panel">
-        <h3>System Sans Serif</h3>
-        <textarea class="edit-box sys" id="outSys" spellcheck="false">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz</textarea>
-      </div>
+  <div class="container">
+    <div class="entry">
+      <!-- Using "Stain" font for content. Note: Only A-Z, a-z, period, space available. No numbers/commas. -->
+      <h1 class="stain-font">stain</h1>
+      <span class="stain-font pos">noun</span>
+      <ul class="def-list">
+        <li class="def-item stain-font">
+          a colored patch or dirty mark that is difficult to remove.
+        </li>
+        <li class="def-item stain-font">
+          a mark of disgrace associated with a particular circumstance quality or person.
+        </li>
+      </ul>
     </div>
-
-    <div>
-      <div class="toolbar">
-        <div class="tool-group">
-          <span>Size</span>
-          <input type="range" min="12" max="128" value="48" id="rangeSize">
-        </div>
-        <div class="tool-group">
-          <span>Tracking</span>
-          <input type="range" min="-5" max="20" value="0" id="rangeSpace">
-        </div>
-        <a href="./dist/Stain.otf" class="btn" download>Download OTF</a>
-      </div>
+    <div class="footer">
+      <a href="./dist/Stain.otf" class="btn" download>Download Font</a>
     </div>
   </div>
-
-  <script>
-    const s = (id) => document.getElementById(id);
-    const stain = s('outStain'), sys = s('outSys');
-    const rSize = s('rangeSize'), rSpace = s('rangeSpace');
-
-    const sync = (src) => {
-      const val = src.value;
-      if(src !== stain) stain.value = val;
-      if(src !== sys) sys.value = val;
-    };
-    const style = () => {
-      const sz = rSize.value + 'px';
-      const sp = (rSpace.value/100) + 'em';
-      [stain, sys].forEach(el => {
-        el.style.fontSize = sz;
-        el.style.letterSpacing = sp;
-      });
-    };
-
-    [stain, sys].forEach(el => el.addEventListener('input', e => sync(e.target)));
-    [rSize, rSpace].forEach(el => el.addEventListener('input', style));
-    style();
-  </script>
 </body>
 </html>
