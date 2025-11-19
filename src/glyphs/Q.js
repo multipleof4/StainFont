@@ -1,13 +1,11 @@
 export const glyphQ=(o,w)=>new o.Glyph({name:"Q",unicode:81,advanceWidth:w,path:(p=>{
-  // Outer Circle (Clockwise)
+  // Standard O Bowl
   p.moveTo(340,-15).curveTo(155,-15,65,160,65,350).curveTo(65,540,155,715,340,715)
    .curveTo(525,715,615,540,615,350).curveTo(615,160,525,-15,340,-15).close()
-  // Inner Circle (Counter-Clockwise for hole)
    .moveTo(340,635).curveTo(220,635,150,500,150,350).curveTo(150,185,220,65,340,65)
    .curveTo(460,65,530,185,530,350).curveTo(530,500,460,635,340,635).close()
-  // Tail
-   .moveTo(380,180).curveTo(380,180,420,220,445,220).curveTo(480,220,540,100,660,30)
-   .lineTo(620,-30).curveTo(500,50,455,120,435,120).curveTo(420,120,370,70,340,40).close();
+  // Simple Tail
+   .moveTo(380,140).lineTo(460,140).lineTo(620,-30).lineTo(550,-30).close();
   return p;
 })(new o.Path())});
 
@@ -19,3 +17,4 @@ export const glyphq=(o,w)=>new o.Glyph({name:"q",unicode:113,advanceWidth:w,path
    .curveTo(340,435,385,350,385,255).curveTo(385,120,325,60,250,60).close();
   return p;
 })(new o.Path())});
+
