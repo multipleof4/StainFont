@@ -6,9 +6,6 @@ on:
       - master
       - main
 
-concurrency:
-  cancel-in-progress: true
-
 jobs:
   build-font:
     runs-on: ubuntu-latest
@@ -42,3 +39,4 @@ jobs:
             git commit -m "chore: build Stain font"
             git push
           fi
+
