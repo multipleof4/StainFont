@@ -2,185 +2,183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Stain Font Preview</title>
+  <title>STAIN — A Work in Progress</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      color-scheme: light;
-      --bg: #f7f7f8;
-      --fg: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #fcfbf9;
+      --fg: #000;
+      --acc: #0044ff;
+      --border: #000;
+      --ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 1.5rem;
-      font-family: var(--font-ui);
-      background: var(--bg);
-      color: var(--fg);
-    }
-    h1 {
-      margin: 0 0 0.75rem;
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-    p {
-      margin: 0 0 0.75rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-      margin: 1.25rem 0 0.5rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .controls input[type="range"] {
-      flex: 1;
-    }
-    .tag {
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-    .input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 1.25rem;
-    }
-    .input-wrap input {
-      flex: 1;
-      padding: 0.35rem 0.5rem;
-      border-radius: 0.4rem;
-      border: 1px solid var(--border);
-      font-family: var(--font-ui);
-      font-size: 0.85rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1.25rem;
-    }
-    @media (min-width: 768px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    .panel {
-      padding: 1rem 1.1rem;
-      border-radius: 0.85rem;
-      border: 1px solid var(--border);
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.03);
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      min-height: 110px;
-    }
-    .label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-    }
-    .sample {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.2ch;
-      font-size: 40px;
-      letter-spacing: 0.03em;
-      color: var(--fg);
-      word-break: break-word;
+      margin: 0; padding: 2rem;
+      background: var(--bg); color: var(--fg);
+      font-family: var(--ui);
+      line-height: 1.4;
     }
     @font-face {
       font-family: "Stain";
       src: url("./dist/Stain.otf") format("opentype");
       font-weight: 400;
-      font-style: normal;
       font-display: swap;
     }
-    .stain {
-      font-family: "Stain", system-ui, sans-serif;
+    .poster {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
     }
-    .sys {
-      font-family: "Candara", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    header {
+      border-bottom: 4px solid var(--border);
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
+    h1 {
+      font-family: "Stain", var(--ui);
+      font-size: clamp(3rem, 12vw, 9rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    .meta {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+    .hero-text {
+      font-family: "Stain", var(--ui);
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1;
+      margin: 2rem 0;
+    }
+    .grid-spec {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+    }
+    .panel {
+      background: #fff;
+      border: 2px solid var(--border);
+      padding: 1rem;
+      box-shadow: 6px 6px 0 var(--border);
+      display: flex; flex-direction: column;
+      min-height: 200px;
+    }
+    .panel h3 { margin: 0 0 0.5rem; font-size: 0.8rem; text-transform: uppercase; color: #666; }
+    .edit-box {
+      font-size: 2.5rem;
+      border: none;
+      outline: none;
+      resize: none;
+      width: 100%;
+      flex: 1;
+      background: transparent;
+    }
+    .stain { font-family: "Stain", sans-serif; }
+    .sys { font-family: var(--ui); }
+    
+    .toolbar {
+      position: sticky;
+      bottom: 2rem;
+      background: var(--fg);
+      color: var(--bg);
+      padding: 1rem 1.5rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+    .tool-group { display: flex; align-items: center; gap: 0.5rem; }
+    input[type="range"] { accent-color: var(--acc); cursor: pointer; }
+    .btn {
+      background: var(--bg);
+      color: var(--fg);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-weight: bold;
+      transition: transform 0.1s;
+    }
+    .btn:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
-  <h1>Stain Font Preview</h1>
-  <p>
-    Compare the in-progress "Stain" typeface against your system font (Candara preferred) in light mode.
-    A–Z / a–z currently implemented as basic outlines.
-  </p>
-
-  <div class="controls">
-    <span class="tag">A–Z a–z</span>
-    <span>Size</span>
-    <input id="size" type="range" min="18" max="96" value="40" />
-    <span id="sizeVal">40px</span>
-    <span>Letter spacing</span>
-    <input id="track" type="range" min="-10" max="40" value="3" />
-    <span id="trackVal">0.03em</span>
-  </div>
-
-  <div class="input-wrap">
-    <span>Sample text:</span>
-    <input id="text" value="Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG." />
-  </div>
-
-  <div class="grid">
-    <section class="panel">
-      <div class="label">Stain</div>
-      <div id="stainSample" class="sample stain">
-        Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.
+  <div class="poster">
+    <header>
+      <h1>Stain</h1>
+      <div class="meta">
+        V0.2.0 &bull; OpenType &bull; CC0
       </div>
+    </header>
+
+    <section class="hero-text">
+      The quick brown fox jumps over the lazy dog.
     </section>
-    <section class="panel">
-      <div class="label">System (Candara / fallback)</div>
-      <div id="sysSample" class="sample sys">
-        Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.
+
+    <div class="grid-spec">
+      <div class="panel">
+        <h3>Stain (Humanist Sans)</h3>
+        <textarea class="edit-box stain" id="outStain" spellcheck="false">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz</textarea>
       </div>
-    </section>
+      <div class="panel">
+        <h3>System Sans Serif</h3>
+        <textarea class="edit-box sys" id="outSys" spellcheck="false">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz</textarea>
+      </div>
+    </div>
+
+    <div>
+      <div class="toolbar">
+        <div class="tool-group">
+          <span>Size</span>
+          <input type="range" min="12" max="128" value="48" id="rangeSize">
+        </div>
+        <div class="tool-group">
+          <span>Tracking</span>
+          <input type="range" min="-5" max="20" value="0" id="rangeSpace">
+        </div>
+        <a href="./dist/Stain.otf" class="btn" download>Download OTF</a>
+      </div>
+    </div>
   </div>
 
   <script>
-    const text = document.getElementById("text");
-    const size = document.getElementById("size");
-    const sizeVal = document.getElementById("sizeVal");
-    const track = document.getElementById("track");
-    const trackVal = document.getElementById("trackVal");
-    const stainSample = document.getElementById("stainSample");
-    const sysSample = document.getElementById("sysSample");
+    const s = (id) => document.getElementById(id);
+    const stain = s('outStain'), sys = s('outSys');
+    const rSize = s('rangeSize'), rSpace = s('rangeSpace');
 
-    const update = () => {
-      const content = text.value || "Stain: The quick brown fox jumps over the lazy dog. THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.";
-      const fs = size.valueAsNumber || 40;
-      const ls = (track.valueAsNumber || 3) / 100;
-      sizeVal.textContent = `${fs}px`;
-      trackVal.textContent = `${ls.toFixed(2)}em`;
-      [stainSample, sysSample].forEach((el) => {
-        el.textContent = content;
-        el.style.fontSize = `${fs}px`;
-        el.style.letterSpacing = `${ls}em`;
+    const sync = (src) => {
+      const val = src.value;
+      if(src !== stain) stain.value = val;
+      if(src !== sys) sys.value = val;
+    };
+    const style = () => {
+      const sz = rSize.value + 'px';
+      const sp = (rSpace.value/100) + 'em';
+      [stain, sys].forEach(el => {
+        el.style.fontSize = sz;
+        el.style.letterSpacing = sp;
       });
     };
 
-    text.addEventListener("input", update);
-    size.addEventListener("input", update);
-    track.addEventListener("input", update);
-    window.addEventListener("load", update);
+    [stain, sys].forEach(el => el.addEventListener('input', e => sync(e.target)));
+    [rSize, rSpace].forEach(el => el.addEventListener('input', style));
+    style();
   </script>
 </body>
 </html>
