@@ -1,12 +1,10 @@
-const mk=(o,n,u,d,w)=>new o.Glyph({name:n,unicode:u,advanceWidth:w,path:d(new o.Path())});
-export const glyphD=(o,w)=>mk(o,"D",68,p=>{
-  p.moveTo(80,0);p.lineTo(80,700);p.lineTo(300,700);p.curveTo(560,700,560,0,300,0);p.close();
-  p.moveTo(160,60);p.lineTo(300,60);p.curveTo(480,60,480,640,300,640);p.lineTo(160,640);p.close();
-  return p;
-},w);
-export const glyphd=(o,w)=>mk(o,"d",100,p=>{
-  p.moveTo(440,0);p.lineTo(440,710);p.lineTo(520,710);p.lineTo(520,0);p.close();
-  p.moveTo(440,240);p.curveTo(440,480,80,480,80,240);p.curveTo(80,0,440,0,440,240);p.close();
-  p.moveTo(440,360);p.curveTo(440,420,160,420,160,240);p.curveTo(160,60,440,60,440,120);p.close();
-  return p;
-},w);
+export const glyphD=(o,w)=>new o.Glyph({name:"D",unicode:68,advanceWidth:w,path:(p=>{
+  p.moveTo(90,0).lineTo(90,700).lineTo(280,700).curveTo(470,700,570,570,570,350).curveTo(570,130,470,0,290,0).close()
+  .moveTo(175,70).lineTo(280,70).curveTo(380,70,485,160,485,350).curveTo(485,540,390,630,280,630).lineTo(175,630).close(); return p;
+})(new o.Path())});
+export const glyphd=(o,w)=>new o.Glyph({name:"d",unicode:100,advanceWidth:w,path:(p=>{
+  p.moveTo(480,720).lineTo(480,0).lineTo(410,0).lineTo(410,55).curveTo(365,-5,290,-15,235,-15).curveTo(110,-15,45,100,45,250)
+  .curveTo(45,410,120,506,255,506).curveTo(335,506,425,450,425,320).lineTo(425,720).close()
+  .moveTo(405,240).curveTo(405,390,330,435,255,435).curveTo(170,435,120,340,120,245).curveTo(120,135,180,55,260,55)
+  .curveTo(330,55,405,105,405,240).close(); return p;
+})(new o.Path())});
