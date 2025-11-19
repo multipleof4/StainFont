@@ -1,108 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stain Typeface</title>
-    <style>
-        @font-face { font-family: 'Stain'; src: url('./dist/Stain.otf') format('opentype'); }
-        
-        :root { --bg: #101010; --fg: #e5e5e5; --border: #333; --font: 'Stain', sans-serif; }
-        body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); overflow-x: hidden; }
-        
-        /* Layout */
-        .container { max-width: 1600px; margin: 0 auto; padding: 2rem 5%; }
-        a { color: inherit; text-decoration: none; transition: opacity 0.2s; }
-        a:hover { opacity: 0.6; }
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STAIN / TYPE</title>
+<style>
+  @font-face{font-family:'Stain';src:url('./dist/Stain.otf') format('opentype');}
+  :root{--bg:#ebe8e3;--ink:#080808;--accent:#d63c3c;}
+  *{box-sizing:border-box;cursor:default;}
+  ::selection{background:var(--accent);color:var(--bg);}
+  
+  body {
+    margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Stain', sans-serif;overflow-x:hidden;
+  }
 
-        /* Header */
-        nav { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 4rem; font-family: sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; }
-        .brand { font-family: var(--font); font-size: 1.5rem; text-transform: none; }
-        .menu { display: flex; gap: 2rem; }
-        .btn { border: 1px solid var(--fg); padding: 0.6rem 1.2rem; border-radius: 4px; transition: 0.2s; }
-        .btn:hover { background: var(--fg); color: var(--bg); opacity: 1; }
+  /* SVG Filters for liquid text */
+  .distort { filter: url('#ink-bleed'); transition: filter 0.5s; }
+  .distort:hover { filter: url('#ink-motion'); }
+  
+  nav {
+    position:fixed;top:0;left:0;width:100%;padding:2rem;
+    display:flex;justify-content:space-between;align-items:baseline;
+    z-index:10;font-size:0.9rem;mix-blend-mode:multiply;pointer-events:none;
+  }
+  nav a { pointer-events:auto;color:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid transparent; }
+  nav a:hover { border-color:var(--ink); }
 
-        /* Hero */
-        h1 { font-size: clamp(6rem, 20vw, 18rem); line-height: 0.8; margin: 0 0 2rem 0; letter-spacing: -0.04em; font-weight: normal; }
-        .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; border-bottom: 1px solid var(--border); padding-bottom: 4rem; margin-bottom: 6rem; }
-        .desc { font-size: 1.4rem; line-height: 1.4; max-width: 600px; }
+  /* Main visual */
+  .hero {
+    height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;position:relative;
+  }
+  
+  h1 {
+    font-size:clamp(5rem,22vw,24rem);line-height:0.75;margin:0;
+    letter-spacing:-0.06em;white-space:nowrap;
+    will-change:filter;
+  }
+  
+  .tag { margin-top:2rem;font-family:sans-serif;text-transform:uppercase;font-size:0.8rem;opacity:0.6;letter-spacing:0.2em; }
 
-        /* Specimen Grid */
-        .glyph-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 8rem; }
-        .glyph { background: var(--bg); height: 100px; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; transition: 0.2s; }
-        .glyph:hover { background: var(--fg); color: var(--bg); z-index: 2; transform: scale(1.2); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .meta { position: absolute; top: 4px; left: 6px; font-size: 9px; font-family: sans-serif; opacity: 0.5; }
+  /* Content blocks */
+  section { border-top:2px solid var(--ink);padding:4rem 2rem;max-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem; }
+  @media(max-width:800px){ section{grid-template-columns:1fr;} }
 
-        /* Type Tester */
-        .tester { min-height: 60vh; }
-        .tester-header { display: flex; justify-content: space-between; margin-bottom: 2rem; font-family: sans-serif; font-size: 0.8rem; color: #888; text-transform: uppercase; }
-        textarea { width: 100%; background: transparent; border: none; color: var(--fg); font-family: var(--font); font-size: 96px; line-height: 1; resize: none; outline: none; height: auto; overflow: hidden; }
-        input[type=range] { width: 200px; accent-color: var(--fg); }
+  .label { font-family:sans-serif;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:1rem;opacity:0.5;position:sticky;top:4rem; }
+  
+  p.copy { font-size:clamp(1.5rem, 4vw, 3.5rem);line-height:1.1;margin:0;max-width:1200px; }
+  .accent { color:var(--accent); }
 
-        footer { padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 4rem; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: #666; }
-    </style>
+  /* Input Area */
+  .input-zone { position:relative;grid-template-columns:1fr;min-height:80vh;display:flex;align-items:center;justify-content:center; }
+  textarea {
+    width:100%;background:transparent;border:none;color:var(--ink);
+    font-family:'Stain';font-size:clamp(3rem, 8vw, 8rem);line-height:0.9;
+    text-align:center;outline:none;resize:none;
+    min-height:50vh;overflow:hidden;
+  }
+
+  /* Footer */
+  footer { background:var(--ink);color:var(--bg);padding:4rem 2rem;text-align:center;font-family:sans-serif;font-size:0.8rem; }
+  footer a { color:#fff;text-decoration:none;opacity:0.6;margin:0 1rem; }
+  footer a:hover { opacity:1; }
+  
+  .dl-btn {
+    display:inline-block;margin-top:2rem;padding:1.5rem 4rem;
+    background:var(--bg);color:var(--ink);font-family:'Stain';font-size:2rem;
+    border-radius:50%;text-decoration:none;
+    transition:transform 0.3s ease;
+  }
+  .dl-btn:hover { transform:scale(1.1) rotate(-3deg); }
+
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <span class="brand">Stain.otf</span>
-            <div class="menu">
-                <a href="./fox.html">The Fox</a>
-                <a href="https://github.com/multipleof4/stain.otf">GitHub</a>
-                <a href="./dist/Stain.otf" class="btn" download>Download</a>
-            </div>
-        </nav>
+  <!-- Filters -->
+  <svg style="width:0;height:0;position:absolute;" aria-hidden="true">
+    <filter id="ink-bleed">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+      <feGaussianBlur stdDeviation="0.5" />
+    </filter>
+    <filter id="ink-motion">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise">
+        <animate attributeName="baseFrequency" values="0.04;0.02;0.04" dur="5s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" />
+      <feGaussianBlur stdDeviation="1.2" />
+    </filter>
+  </svg>
 
-        <header>
-            <h1>Stain</h1>
-            <div class="intro">
-                <div class="desc">
-                    A procedural OpenType typeface constructed with JavaScript. <br>
-                    Organic curves meet rigorous logic.
-                </div>
-            </div>
-        </header>
-
-        <main>
-            <div class="glyph-grid">
-                <!-- Standard ASCII set -->
-                <script>
-                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-                    chars.split('').forEach(c => {
-                        document.write(`<div class="glyph"><span class="meta">${c.charCodeAt(0)}</span>${c}</div>`);
-                    });
-                </script>
-            </div>
-
-            <section class="tester">
-                <div class="tester-header">
-                    <span>Type Tester</span>
-                    <input type="range" min="24" max="240" value="96" id="sizer">
-                </div>
-                <textarea id="field" spellcheck="false">The quick brown fox jumps over the lazy dog.</textarea>
-            </section>
-        </main>
-
-        <footer>
-            Public Domain (CC0 1.0) • <a href="https://github.com/multipleof4/stain.otf">View Source</a>
-        </footer>
+  <nav>
+    <div class="l">Stain . 0.2</div>
+    <div class="r">
+      <a href="#type">Test</a> &nbsp;/&nbsp; 
+      <a href="https://github.com/multipleof4/stain.otf">Source</a>
     </div>
+  </nav>
 
-    <script>
-        const sizer = document.getElementById('sizer');
-        const field = document.getElementById('field');
-        
-        // Font sizing
-        sizer.addEventListener('input', e => field.style.fontSize = e.target.value + 'px');
-        
-        // Auto-resize textarea
-        const fit = () => {
-            field.style.height = 'auto';
-            field.style.height = field.scrollHeight + 'px';
-        };
-        field.addEventListener('input', fit);
-        window.addEventListener('resize', fit);
-        fit();
-    </script>
+  <div class="hero">
+    <h1 class="distort">STAIN</h1>
+    <span class="tag">Constructed Liquid Geometry</span>
+  </div>
+
+  <section>
+    <div><span class="label">Description</span></div>
+    <div>
+      <p class="copy">
+        Stain is a display typeface simulating ink absorption on porous paper. 
+        Strict Bezier curves compromised by <span class="accent">organic bleeding</span> logic.
+      </p>
+    </div>
+  </section>
+
+  <section id="type" class="input-zone">
+    <textarea id="txt" spellcheck="false">ink on paper</textarea>
+  </section>
+
+  <footer>
+    <a href="./dist/Stain.otf" class="dl-btn">Download</a><br><br><br>
+    <span>MIT License / CC0 Public Domain</span><br><br>
+    <a href="https://github.com/multipleof4/stain.otf">github.com/multipleof4/stain.otf</a>
+  </footer>
+
+  <script>
+    // Auto resize text area
+    const tx = document.getElementById('txt');
+    const rs = ()=> { tx.style.height='auto'; tx.style.height = tx.scrollHeight+'px'; };
+    tx.addEventListener('input', rs);
+    window.addEventListener('resize', rs);
+    rs();
+  </script>
 </body>
 </html>
