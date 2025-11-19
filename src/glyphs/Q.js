@@ -1,9 +1,14 @@
 export const glyphQ=(o,w)=>new o.Glyph({name:"Q",unicode:81,advanceWidth:w,path:(p=>{
+  // Ring
   p.moveTo(340,-15).curveTo(155,-15,65,160,65,350).curveTo(65,540,155,715,340,715)
    .curveTo(525,715,615,540,615,350).curveTo(615,160,525,-15,340,-15).close()
    .moveTo(340,635).curveTo(220,635,150,500,150,350).curveTo(150,185,220,65,340,65)
    .curveTo(460,65,530,185,530,350).curveTo(530,500,460,635,340,635).close()
-   .moveTo(380,60).lineTo(460,60).lineTo(620,-30).lineTo(550,-30).close(); // Tail lowered
+  // Thick Tail
+   .moveTo(360,200).curveTo(400,180,410,150,450,100) // Start inside
+   .lineTo(620,-80).lineTo(560,-130) // End outside
+   .lineTo(390,50) // Return path
+   .curveTo(360,80,330,180,360,200).close(); 
   return p;
 })(new o.Path())});
 
