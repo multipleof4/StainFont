@@ -1,55 +1,13 @@
-const makeGlyph = (opentype, name, unicode, cmds, adv) =>
-  new opentype.Glyph({
-    name,
-    unicode,
-    advanceWidth: adv,
-    path: cmds(new opentype.Path())
-  });
-
-export const glyphC = (opentype, adv) =>
-  makeGlyph(
-    opentype,
-    "C",
-    "C".codePointAt(0),
-    (p) => {
-      p.moveTo(350, -10);
-      p.curveTo(190, -10, 80, 100, 80, 280);
-      p.lineTo(80, 420);
-      p.curveTo(80, 600, 190, 710, 350, 710);
-      p.curveTo(460, 710, 540, 660, 580, 570);
-      p.lineTo(520, 540);
-      p.curveTo(490, 610, 430, 650, 350, 650);
-      p.curveTo(220, 650, 140, 570, 140, 420);
-      p.lineTo(140, 280);
-      p.curveTo(140, 130, 220, 50, 350, 50);
-      p.curveTo(430, 50, 490, 90, 520, 160);
-      p.lineTo(580, 130);
-      p.curveTo(540, 40, 460, -10, 350, -10);
-      p.close();
-      return p;
-    },
-    adv
-  );
-
-export const glyphc = (opentype, adv) =>
-  makeGlyph(
-    opentype,
-    "c",
-    "c".codePointAt(0),
-    (p) => {
-      p.moveTo(330, -10);
-      p.curveTo(200, -10, 110, 80, 110, 240);
-      p.curveTo(110, 400, 200, 490, 330, 490);
-      p.curveTo(410, 490, 470, 460, 510, 400);
-      p.lineTo(460, 360);
-      p.curveTo(430, 410, 390, 430, 330, 430);
-      p.curveTo(230, 430, 170, 370, 170, 240);
-      p.curveTo(170, 110, 230, 50, 330, 50);
-      p.curveTo(390, 50, 430, 70, 460, 120);
-      p.lineTo(510, 80);
-      p.curveTo(470, 20, 410, -10, 330, -10);
-      p.close();
-      return p;
-    },
-    adv
-  );
+const mk=(o,n,u,d,w)=>new o.Glyph({name:n,unicode:u,advanceWidth:w,path:d(new o.Path())});
+export const glyphC=(o,w)=>mk(o,"C",67,p=>{
+  p.moveTo(540,200);p.lineTo(460,180);p.curveTo(440,80,300,70,300,70);p.curveTo(160,70,160,630,300,630);
+  p.curveTo(440,630,460,520,460,520);p.lineTo(540,500);p.curveTo(520,710,300,710,300,710);
+  p.curveTo(60,710,60,-10,300,-10);p.curveTo(520,-10,540,200,540,200);p.close();
+  return p;
+},w);
+export const glyphc=(o,w)=>mk(o,"c",99,p=>{
+  p.moveTo(480,140);p.lineTo(400,120);p.curveTo(380,60,300,60,300,60);p.curveTo(160,60,160,420,300,420);
+  p.curveTo(380,420,400,360,400,360);p.lineTo(480,340);p.curveTo(460,490,300,490,300,490);
+  p.curveTo(80,490,80,-10,300,-10);p.curveTo(460,-10,480,140,480,140);p.close();
+  return p;
+},w);
