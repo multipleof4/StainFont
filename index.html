@@ -1,97 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Stain Font</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #f8f7f2;
-      --ink: #1a1a1a;
-      --accent: #a6a6a6;
-    }
-    @font-face { font-family: "Stain"; src: url("./dist/Stain.otf") format("opentype"); }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh;
-      background: var(--bg); color: var(--ink);
-      font-family: "Stain", sans-serif;
-      overflow-x: hidden;
-      padding: 2rem;
-    }
-    /* Creative ink stains */
-    .stain-mark {
-      position: absolute; z-index: -1; pointer-events: none; opacity: 0.06;
-      background: #000; border-radius: 50%; filter: blur(30px);
-    }
-    .s1 { top: -5%; left: -5%; width: 40vw; height: 40vw; }
-    .s2 { bottom: -10%; right: -5%; width: 50vw; height: 50vw; }
-    .s3 { top: 40%; left: 60%; width: 200px; height: 200px; filter: blur(60px); opacity: 0.08; }
-    
-    .container {
-      max-width: 900px; margin: 0 auto;
-      min-height: 85vh; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    header { 
-      text-align: center; 
-      border-bottom: 4px solid var(--ink); 
-      padding-bottom: 2rem; margin-bottom: 4rem;
-      border-radius: 0 0 50% 50% / 0 0 10px 10px; /* Ink bleed edge */
-    }
-    h1 { font-size: clamp(4rem, 15vw, 9rem); margin: 0; line-height: 0.8; text-transform: uppercase; }
-    
-    /* Dictionary definition block */
-    .def-block { margin-bottom: 4rem; }
-    .word { font-size: clamp(3rem, 8vw, 5rem); margin: 0 0 1rem; display: block; }
-    .pos { font-size: 1.5rem; color: var(--accent); display: block; margin-bottom: 1.5rem; font-style: italic; }
-    .meaning {
-      font-size: clamp(1.2rem, 3.5vw, 2rem); 
-      line-height: 1.2; 
-      margin-bottom: 1.5rem;
-      padding-left: 1.5rem;
-      border-left: 3px solid var(--accent);
-    }
-    
-    .info { text-align: center; font-size: 1.1rem; color: var(--accent); margin: 3rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
-    
-    .download-area { text-align: center; margin-top: auto; }
-    .btn {
-      display: inline-block; padding: 1.5rem 3rem;
-      font-size: 2rem; color: var(--bg); background: var(--ink);
-      text-decoration: none; border-radius: 90% 40% 80% 30% / 40% 80% 50% 70%; /* organic blot shape */
-      transition: 0.2s ease;
-    }
-    .btn:hover { transform: scale(1.05) rotate(-1deg); border-radius: 50% 90% 30% 80% / 90% 30% 70% 40%; }
-    .repo-link { display: block; margin-top: 2rem; color: var(--ink); text-decoration: none; font-size: 1rem; }
-    .repo-link:hover { text-decoration: underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stain Typeface</title>
+    <style>
+        @font-face { font-family: 'Stain'; src: url('./dist/Stain.otf') format('opentype'); }
+        
+        :root { --bg: #101010; --fg: #e5e5e5; --border: #333; --font: 'Stain', sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); overflow-x: hidden; }
+        
+        /* Layout */
+        .container { max-width: 1600px; margin: 0 auto; padding: 2rem 5%; }
+        a { color: inherit; text-decoration: none; transition: opacity 0.2s; }
+        a:hover { opacity: 0.6; }
+
+        /* Header */
+        nav { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 4rem; font-family: sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; }
+        .brand { font-family: var(--font); font-size: 1.5rem; text-transform: none; }
+        .menu { display: flex; gap: 2rem; }
+        .btn { border: 1px solid var(--fg); padding: 0.6rem 1.2rem; border-radius: 4px; transition: 0.2s; }
+        .btn:hover { background: var(--fg); color: var(--bg); opacity: 1; }
+
+        /* Hero */
+        h1 { font-size: clamp(6rem, 20vw, 18rem); line-height: 0.8; margin: 0 0 2rem 0; letter-spacing: -0.04em; font-weight: normal; }
+        .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; border-bottom: 1px solid var(--border); padding-bottom: 4rem; margin-bottom: 6rem; }
+        .desc { font-size: 1.4rem; line-height: 1.4; max-width: 600px; }
+
+        /* Specimen Grid */
+        .glyph-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 8rem; }
+        .glyph { background: var(--bg); height: 100px; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; transition: 0.2s; }
+        .glyph:hover { background: var(--fg); color: var(--bg); z-index: 2; transform: scale(1.2); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .meta { position: absolute; top: 4px; left: 6px; font-size: 9px; font-family: sans-serif; opacity: 0.5; }
+
+        /* Type Tester */
+        .tester { min-height: 60vh; }
+        .tester-header { display: flex; justify-content: space-between; margin-bottom: 2rem; font-family: sans-serif; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        textarea { width: 100%; background: transparent; border: none; color: var(--fg); font-family: var(--font); font-size: 96px; line-height: 1; resize: none; outline: none; height: auto; overflow: hidden; }
+        input[type=range] { width: 200px; accent-color: var(--fg); }
+
+        footer { padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 4rem; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: #666; }
+    </style>
 </head>
 <body>
-  <div class="stain-mark s1"></div>
-  <div class="stain-mark s2"></div>
-  <div class="stain-mark s3"></div>
+    <div class="container">
+        <nav>
+            <span class="brand">Stain.otf</span>
+            <div class="menu">
+                <a href="./fox.html">The Fox</a>
+                <a href="https://github.com/multipleof4/stain.otf">GitHub</a>
+                <a href="./dist/Stain.otf" class="btn" download>Download</a>
+            </div>
+        </nav>
 
-  <div class="container">
-    <header>
-      <h1>Stain Font</h1>
-    </header>
+        <header>
+            <h1>Stain</h1>
+            <div class="intro">
+                <div class="desc">
+                    A procedural OpenType typeface constructed with JavaScript. <br>
+                    Organic curves meet rigorous logic.
+                </div>
+            </div>
+        </header>
 
-    <section class="def-block">
-      <span class="word">stain</span>
-      <span class="pos">noun</span>
-      <div class="meaning">1. a colored patch or dirty mark that is difficult to remove.</div>
-      <div class="meaning">2. a mark of disgrace associated with a particular circumstance quality or person.</div>
-    </section>
+        <main>
+            <div class="glyph-grid">
+                <!-- Standard ASCII set -->
+                <script>
+                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+                    chars.split('').forEach(c => {
+                        document.write(`<div class="glyph"><span class="meta">${c.charCodeAt(0)}</span>${c}</div>`);
+                    });
+                </script>
+            </div>
 
-    <section class="info">
-      A programmatic font inspired by Candara.<br>
-      Open Source. Public Domain.
-    </section>
+            <section class="tester">
+                <div class="tester-header">
+                    <span>Type Tester</span>
+                    <input type="range" min="24" max="240" value="96" id="sizer">
+                </div>
+                <textarea id="field" spellcheck="false">The quick brown fox jumps over the lazy dog.</textarea>
+            </section>
+        </main>
 
-    <section class="download-area">
-      <a href="./dist/Stain.otf" class="btn" download>Download Stain.OTF</a>
-      <a href="https://github.com/multipleof4/stain.otf" class="repo-link">github.com / multipleof4 / stain.otf</a>
-    </section>
-  </div>
+        <footer>
+            Public Domain (CC0 1.0) • <a href="https://github.com/multipleof4/stain.otf">View Source</a>
+        </footer>
+    </div>
+
+    <script>
+        const sizer = document.getElementById('sizer');
+        const field = document.getElementById('field');
+        
+        // Font sizing
+        sizer.addEventListener('input', e => field.style.fontSize = e.target.value + 'px');
+        
+        // Auto-resize textarea
+        const fit = () => {
+            field.style.height = 'auto';
+            field.style.height = field.scrollHeight + 'px';
+        };
+        field.addEventListener('input', fit);
+        window.addEventListener('resize', fit);
+        fit();
+    </script>
 </body>
 </html>
