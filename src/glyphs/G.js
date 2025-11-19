@@ -1,84 +1,16 @@
-const makeGlyph=(opentype,name,unicode,cmds,adv)=>
-  new opentype.Glyph({
-    name,
-    unicode,
-    advanceWidth:adv,
-    path:cmds(new opentype.Path())
-  });
-
-export const glyphG=(opentype,adv)=>
-  makeGlyph(
-    opentype,
-    "G",
-    "G".codePointAt(0),
-    p=>{
-      p.moveTo(350,-10);
-      p.curveTo(190,-10,80,100,80,280);
-      p.lineTo(80,420);
-      p.curveTo(80,600,190,710,350,710);
-      p.curveTo(460,710,540,660,580,570);
-      p.lineTo(520,540);
-      p.curveTo(490,610,430,650,350,650);
-      p.curveTo(220,650,140,570,140,420);
-      p.lineTo(140,280);
-      p.curveTo(140,130,220,50,350,50);
-      p.curveTo(450,50,520,100,540,190);
-      p.lineTo(340,190);
-      p.lineTo(340,250);
-      p.lineTo(600,250);
-      p.lineTo(600,220);
-      p.curveTo(600,70,500,-10,350,-10);
-      p.close();
-      return p;
-    },
-    adv
-  );
-
-export const glyphg=(opentype,adv)=>
-  makeGlyph(
-    opentype,
-    "g",
-    "g".codePointAt(0),
-    p=>{
-      // single‑storey g: round bowl + right descender, no stray vertical slice
-      const cx=300;
-      const rOuter=210;
-      const rInner=130;
-
-      // outer bowl
-      p.moveTo(cx, -10);
-      p.curveTo(cx- rOuter, -10, 90, 90, 90,230);
-      p.curveTo(90,370, cx- rOuter+40,470, cx,470);
-      p.curveTo( cx+ rOuter-40,470,510,370,510,230);
-      p.curveTo(510,90, cx+ rOuter-40,-10, cx,-10);
-      p.close();
-
-      // inner counter
-      p.moveTo(cx,50);
-      p.curveTo(cx+ rInner,50, cx+ rInner,130, cx+ rInner,230);
-      p.curveTo(cx+ rInner,330, cx,410, cx,410);
-      p.curveTo(cx- rInner,410, cx- rInner,330, cx- rInner,230);
-      p.curveTo(cx- rInner,130, cx- rInner,50, cx,50);
-      p.close();
-
-      // descender from right bowl edge
-      p.moveTo(450,230);
-      p.curveTo(450,360,390,430,310,430);
-      p.lineTo(310,490);
-      p.curveTo(420,490,510,410,510,260);
-      p.lineTo(510,-150);
-      p.lineTo(450,-150);
-      p.lineTo(450,230);
-      p.close();
-
-      // small ear on upper-right
-      p.moveTo(420,260);
-      p.curveTo(455,245,480,215,495,180);
-      p.lineTo(455,160);
-      p.curveTo(440,190,420,210,395,225);
-      p.close();
-
-      return p;
-    },
-    adv
-  );
+const mk=(o,n,u,d,w)=>new o.Glyph({name:n,unicode:u,advanceWidth:w,path:d(new o.Path())});
+export const glyphG=(o,w)=>mk(o,"G",71,p=>{
+  p.moveTo(540,200);p.lineTo(460,180);p.curveTo(440,80,300,70,300,70);p.curveTo(160,70,160,630,300,630);
+  p.curveTo(440,630,460,520,460,520);p.lineTo(540,500);p.curveTo(520,710,300,710,300,710);
+  p.curveTo(60,710,60,-10,300,-10);p.curveTo(500,-10,540,150,540,150);p.lineTo(540,300);
+  p.lineTo(300,300);p.lineTo(300,220);p.lineTo(460,220);p.lineTo(460,200);p.close();
+  return p;
+},w);
+export const glyphg=(o,w)=>mk(o,"g",103,p=>{
+  p.moveTo(440,480);p.lineTo(440,0);p.curveTo(440,-150,300,-150,300,-150);p.curveTo(160,-150,160,0,160,0);
+  p.lineTo(240,0);p.curveTo(240,-80,360,-80,360,0);p.lineTo(360,60);p.curveTo(360,60,80,60,80,270);
+  p.curveTo(80,480,440,480,440,480);p.lineTo(520,480);p.lineTo(520,0);p.curveTo(520,-200,300,-200,300,-200);
+  p.curveTo(80,-200,80,0,80,0);p.lineTo(160,0);p.close();
+  p.moveTo(360,140);p.curveTo(360,400,160,400,160,270);p.curveTo(160,140,360,140,360,140);p.close();
+  return p;
+},w);
