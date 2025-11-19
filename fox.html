@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stain - The Fox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @font-face { font-family: "Stain"; src: url("./dist/Stain.otf") format("opentype"); }
+    body {
+      margin: 0; padding: 2rem;
+      background: #f8f7f2; color: #1a1a1a;
+      font-family: "Stain", sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 4rem; text-align: center;
+    }
+    .sample { font-size: clamp(2rem, 6vw, 4rem); line-height: 1.2; max-width: 1200px; }
+    .lc { text-transform: lowercase; }
+    .uc { text-transform: uppercase; }
+    .meta { position: fixed; bottom: 1rem; right: 1rem; font-size: 1rem; opacity: 0.5; text-decoration: none; color: inherit; }
+    .meta:hover { opacity: 1; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="sample lc">
+    the quick brown fox jumps over the lazy dog.
+  </div>
+  
+  <div class="sample uc">
+    the quick brown fox jumps over the lazy dog.
+  </div>
+
+  <a href="./index.html" class="meta">index</a>
+</body>
+</html>
