@@ -6,12 +6,16 @@ export const glyphB=(o,w)=>new o.Glyph({name:"B",unicode:66,advanceWidth:w,path:
 })(new o.Path())});
 
 export const glyphb=(o,w)=>new o.Glyph({name:"b",unicode:98,advanceWidth:w,path:(p=>{
-  // Match d stem style: straight ascender
-  p.moveTo(95,720).lineTo(175,720).lineTo(175,400).lineTo(175,0).lineTo(95,0).close()
-  // Bowl
-   .moveTo(175,55).lineTo(175,350).curveTo(175,480,270,520,345,520).curveTo(475,520,535,395,535,260)
-   .curveTo(535,95,445,-15,335,-15).curveTo(250,-15,195,10,175,55).close()
-  // Hole (CW)
-   .moveTo(345,440).curveTo(305,440,255,415,255,265).curveTo(255,115,305,65,345,65)
-   .curveTo(415,65,455,130,455,250).curveTo(455,375,415,440,345,440).close(); return p;
+  // Unified Outer Path (CCW-ish) to match 'd' reflection logic
+  // Stem: Left ~90-160. Bowl flows from 160.
+  p.moveTo(90,720).lineTo(160,720).lineTo(160,360)
+   .curveTo(160,460,205,525,330,525).curveTo(465,525,530,410,530,260) // Right heavy bowl
+   .curveTo(530,100,455,-15,325,-15).curveTo(245,-15,190,20,160,70)
+   .lineTo(160,0).lineTo(90,0).close()
+  // Inner Hole (Opposite Winding)
+   .moveTo(160,260).curveTo(160,155,210,60,300,60)
+   .curveTo(380,60,445,140,445,260).curveTo(445,370,400,450,310,450)
+   .curveTo(225,450,160,380,160,260).close();
+  return p;
 })(new o.Path())});
+
