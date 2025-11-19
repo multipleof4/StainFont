@@ -1,16 +1,21 @@
 export const glyphG=(o,w)=>new o.Glyph({name:"G",unicode:71,advanceWidth:w,path:(p=>{
-  p.moveTo(580,290).lineTo(330,290).lineTo(330,360).lineTo(500,360).lineTo(500,390).curveTo(480,560,410,655,320,655)
-   .curveTo(190,655,135,520,135,360).curveTo(135,200,190,65,320,65).curveTo(410,65,470,110,500,190).lineTo(570,160)
-   .curveTo(530,50,440,-15,320,-15).curveTo(140,-15,50,160,50,360).curveTo(50,560,150,725,320,725).curveTo(450,725,550,610,580,390).close(); return p;
+  p.moveTo(590,550).lineTo(520,510).curveTo(500,570,445,620,350,620).curveTo(195,620,165,465,165,360)
+   .curveTo(165,225,220,100,350,100).curveTo(445,100,510,155,520,250).lineTo(520,290).lineTo(330,290)
+   .lineTo(330,365).lineTo(600,365).lineTo(600,250).curveTo(595,50,470,-15,350,-15).curveTo(150,-15,65,140,65,360)
+   .curveTo(65,570,170,715,350,715).curveTo(485,715,565,645,590,550).close(); return p;
 })(new o.Path())});
 
 export const glyphg=(o,w)=>new o.Glyph({name:"g",unicode:103,advanceWidth:w,path:(p=>{
-  p.moveTo(440,250).curveTo(440,300,420,340,380,370).lineTo(470,380).lineTo(470,500).lineTo(190,500).curveTo(90,500,50,430,50,360)
-   .curveTo(50,290,100,240,170,230).curveTo(110,210,70,160,70,100).curveTo(70,30,130,-15,210,-15).lineTo(330,-15)
-   .curveTo(410,-15,460,-50,460,-120).curveTo(460,-180,410,-215,310,-215).curveTo(210,-215,160,-180,150,-130).lineTo(80,-140)
-   .curveTo(100,-220,180,-275,310,-275).curveTo(470,-275,540,-200,540,-110).curveTo(540,-20,470,20,390,35)
-   .curveTo(420,50,440,80,440,120).lineTo(440,250).close()
-   .moveTo(360,100).curveTo(360,50,310,40,250,40).curveTo(180,40,140,60,140,110).curveTo(140,160,180,180,250,180).curveTo(320,180,360,150,360,100).close()
-   .moveTo(390,360).curveTo(390,310,350,290,270,290).curveTo(190,290,130,320,130,380).curveTo(130,440,180,450,270,450).curveTo(360,450,390,420,390,360).close();
+  // Double-story g structure: Ear, Top Bowl, Link, Bottom Loop
+  p.moveTo(380,510).lineTo(260,510).curveTo(160,510,70,435,70,340).curveTo(70,270,110,215,190,200)
+   .curveTo(130,190,60,145,60,65).curveTo(60,-25,130,-200,225,-200).curveTo(375,-200,435,-85,440,50)
+   .lineTo(500,50).lineTo(515,345).curveTo(535,390,540,465,540,485).lineTo(480,485) // Ear
+   .curveTo(470,445,455,365,440,330).lineTo(440,340).curveTo(440,430,435,510,380,510).close()
+   // Top Hole (Counter-Clockwise relative to shape)
+   .moveTo(360,345).curveTo(360,280,310,255,250,255).curveTo(165,255,140,315,140,360)
+   .curveTo(140,405,165,450,250,450).curveTo(325,450,360,400,360,345).close()
+   // Bottom Hole
+   .moveTo(365,60).curveTo(360,-30,320,-145,240,-145).curveTo(160,-145,130,-60,130,35)
+   .curveTo(130,110,175,165,270,170).curveTo(335,165,365,110,365,60).close();
   return p;
 })(new o.Path())});
