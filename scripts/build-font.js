@@ -33,6 +33,12 @@ const __filename = fileURLToPath(import.meta.url);
 const outDir = path.join(path.dirname(__filename), "..", "dist");
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
+// Polyfill: opentype.js Path methods return undefined, preventing chaining. Patching to return this.
+["moveTo","lineTo","curveTo","quadraticCurveTo","close"].forEach(m=>{
+  const f=opentype.Path.prototype[m];
+  opentype.Path.prototype[m]=function(...a){f.apply(this,a);return this};
+});
+
 const mkGlyph = (n, u, a, fn) => new opentype.Glyph({ name: n, unicode: u, advanceWidth: a, path: fn(new opentype.Path()) });
 
 // Candara-ish tracking: wider capitals, tighter lower, distinct narrow/wide glyphs
